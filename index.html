@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="google-site-verification" content="eZtG7tuLFuL-_dKp3n28crwxS5okzzwt_8BdzJxhMqU">
+  <title>Kashmera – متجر الاسدالات والملابس الكاجوال المحتشمة</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- TOP PROMO BAR -->
+<div class="top-promo-banner home-promo-strip">
+  <div class="promo-text-container">
+    <span class="promo-text">الشحن: القاهرة <b>80 جنيه</b>، الجيزة <b>120 جنيه</b>، وباقي المحافظات <b>150 جنيه</b></span>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header class="main-header">
+  <div class="container header-container">
+    <div class="header-actions header-actions-right">
+      <button class="mobile-search-btn" onclick="openMobileSearch()" title="بحث"><i class="fas fa-search"></i></button>
+      <div class="search-area">
+        <i class="fas fa-search"></i>
+        <input type="text" placeholder="ابحثي عن منتج...">
+      </div>
+    </div>
+    <div class="logo">
+      <a href="index.html">
+        <img src="images/Gemini_Generated_Image_h6itgfh6itgfh6it.png" alt="Kashmera">
+      </a>
+    </div>
+    <div class="header-actions header-actions-left">
+      <a href="#" class="icon-link" onclick="openCart();return false" title="السلة">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="cart-badge" id="cart-count">0</span>
+      </a>
+      <a href="account.html" title="حسابي"><i class="fas fa-user"></i></a>
+    </div>
+  </div>
+</header>
+
+<!-- MOBILE SEARCH OVERLAY -->
+<div class="mobile-search-overlay" id="mobile-search-overlay">
+  <div class="mobile-search-box">
+    <div class="search-area">
+      <i class="fas fa-search"></i>
+      <input type="text" id="mobile-search-input" placeholder="ابحثي عن منتج...">
+    </div>
+    <button class="mobile-search-close" onclick="closeMobileSearch()"><i class="fas fa-times"></i></button>
+  </div>
+</div>
+
+<!-- MOBILE CATEGORY CHIPS -->
+<div class="mobile-cat-chips">
+  <a href="index.html" class="active">الكل</a>
+  <a href="cagual.html">كاجوال</a>
+  <a href="isdals.html">الاسدالات</a>
+  <a href="bestsellers.html">الأكثر مبيعاً</a>
+</div>
+
+<!-- NAV -->
+<nav class="main-nav">
+  <div class="container">
+    <ul>
+      <li><a href="index.html" class="active">الرئيسية</a></li>
+      <li><a href="cagual.html">كاجوال</a></li>
+      <li><a href="isdals.html">الاسدالات</a></li>
+      <li><a href="bestsellers.html">الأكثر مبيعاً</a></li>
+      <li><a href="#contact">تواصل معنا</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+
+  <!-- HERO SECTION -->
+  <section class="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="hero-grid container">
+      <div class="hero-content">
+        <h1 class="hero-title">تخفيضات موسمية<br><span>خصم 10%</span></h1>
+        <p class="hero-sub">خصم مميز على اختياراتك من Kashmera</p>
+        <div class="hero-btns">
+          <a href="#products" class="btn-pink hero-btn-main">تسوقي الآن</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="home-offers" aria-label="العروض وخدمات التوصيل">
+    <div class="container home-offers-layout">
+      <div class="home-coupon-card">
+        <div class="home-coupon-copy">
+          <span class="home-coupon-label">خصم إضافي</span>
+          <strong>استخدمي كود الخصم</strong>
+        </div>
+        <div class="home-coupon-action">
+          <code>KASH10</code>
+          <button type="button" class="home-copy-code" onclick="copyHomeCoupon(this)">
+            <i class="fas fa-copy" aria-hidden="true"></i> نسخ الكود
+          </button>
+        </div>
+      </div>
+      <div class="home-service-bar">
+        <div class="home-service-item"><i class="fas fa-truck-fast" aria-hidden="true"></i><span><strong>شحن واضح</strong><small>من 80 جنيه حسب المحافظة</small></span></div>
+        <div class="home-service-item"><i class="fas fa-money-bill-wave" aria-hidden="true"></i><span><strong>الدفع عند الاستلام</strong><small>ادفعي عند وصول طلبك</small></span></div>
+        <div class="home-service-item"><i class="fas fa-rotate-right" aria-hidden="true"></i><span><strong>استرجاع مرن</strong><small>خلال 14 يومًا</small></span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MINI CATEGORIES -->
+  <section class="mini-categories" id="categories">
+    <div class="container">
+      <h2 class="section-title">✨ اكتشفي مجموعتنا</h2>
+      <div class="mini-categories-grid">
+        <a href="cagual.html" class="mini-cat-item">
+          <div class="mini-cat-img"><img src="images/images (9).jpg" alt="كاجوال"></div>
+          <span>كاجوال</span>
+        </a>
+        <a href="isdals.html" class="mini-cat-item">
+          <div class="mini-cat-img"><img src="images/images (8).jpg" alt="اسدالات"></div>
+          <span>الاسدالات</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <!-- BESTSELLERS -->
+  <section class="products-section" id="bestsellers">
+    <div class="container">
+      <h2 class="section-title">الأكثر مبيعاً</h2>
+      <p class="products-section-subtitle">اختيارات Kashmera الأكثر طلبًا، لتسهيل اختيارك.</p>
+      <div class="home-products-carousel home-bestseller-carousel">
+        <button class="carousel-arrow" type="button" aria-label="المنتجات السابقة" onclick="scrollHomeProducts('bestsellers-grid',-1)"><i class="fas fa-chevron-right"></i></button>
+        <div class="products-grid home-products-track home-bestseller-track" id="bestsellers-grid"></div>
+        <button class="carousel-arrow" type="button" aria-label="المنتجات التالية" onclick="scrollHomeProducts('bestsellers-grid',1)"><i class="fas fa-chevron-left"></i></button>
+      </div>
+      <div class="home-more-link"><a href="bestsellers.html" class="btn-secondary">شاهد المزيد من الأكثر مبيعاً <i class="fas fa-arrow-left"></i></a></div>
+      <div class="carousel-pagination" data-track="bestsellers-grid" aria-label="التنقل بين المنتجات الأكثر مبيعاً">
+        <button class="carousel-dot active" type="button" aria-label="المنتج 1 من 4" aria-current="true" onclick="goToHomeProduct('bestsellers-grid',0)"></button>
+        <button class="carousel-dot" type="button" aria-label="المنتج 2 من 4" onclick="goToHomeProduct('bestsellers-grid',1)"></button>
+        <button class="carousel-dot" type="button" aria-label="المنتج 3 من 4" onclick="goToHomeProduct('bestsellers-grid',2)"></button>
+        <button class="carousel-dot" type="button" aria-label="المنتج 4 من 4" onclick="goToHomeProduct('bestsellers-grid',3)"></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURED SECTIONS -->
+  <section class="products-section" id="products">
+    <div class="container">
+      <h2 class="section-title">أبرز المنتجات</h2>
+      <p class="products-section-subtitle">قطع مختارة من تشكيلاتنا لتجديد إطلالتك.</p>
+
+      <div class="featured-row">
+        <p class="featured-category-label">الاسدالات</p>
+        <div class="home-products-carousel">
+          <button class="carousel-arrow" type="button" aria-label="المنتجات السابقة" onclick="scrollHomeProducts('featured-isdals',-1)"><i class="fas fa-chevron-right"></i></button>
+          <div class="products-grid home-products-track featured-products-grid" id="featured-isdals"></div>
+          <button class="carousel-arrow" type="button" aria-label="المنتجات التالية" onclick="scrollHomeProducts('featured-isdals',1)"><i class="fas fa-chevron-left"></i></button>
+        </div>
+        <div class="carousel-pagination" data-track="featured-isdals" aria-label="التنقل بين منتجات الاسدالات">
+          <button class="carousel-dot active" type="button" aria-label="المنتج 1 من 4" aria-current="true" onclick="goToHomeProduct('featured-isdals',0)"></button>
+          <button class="carousel-dot" type="button" aria-label="المنتج 2 من 4" onclick="goToHomeProduct('featured-isdals',1)"></button>
+          <button class="carousel-dot" type="button" aria-label="المنتج 3 من 4" onclick="goToHomeProduct('featured-isdals',2)"></button>
+          <button class="carousel-dot" type="button" aria-label="المنتج 4 من 4" onclick="goToHomeProduct('featured-isdals',3)"></button>
+        </div>
+        <div class="featured-more"><a href="isdals.html" class="btn-secondary">شاهد المزيد من الاسدالات <i class="fas fa-arrow-left"></i></a></div>
+      </div>
+
+      <div class="featured-row">
+        <p class="featured-category-label">الكاجوال</p>
+        <div class="home-products-carousel">
+          <button class="carousel-arrow" type="button" aria-label="المنتجات السابقة" onclick="scrollHomeProducts('featured-cagual',-1)"><i class="fas fa-chevron-right"></i></button>
+          <div class="products-grid home-products-track featured-products-grid" id="featured-cagual"></div>
+          <button class="carousel-arrow" type="button" aria-label="المنتجات التالية" onclick="scrollHomeProducts('featured-cagual',1)"><i class="fas fa-chevron-left"></i></button>
+        </div>
+        <div class="carousel-pagination" data-track="featured-cagual" aria-label="التنقل بين منتجات الكاجوال">
+          <button class="carousel-dot active" type="button" aria-label="المنتج 1 من 4" aria-current="true" onclick="goToHomeProduct('featured-cagual',0)"></button>
+          <button class="carousel-dot" type="button" aria-label="المنتج 2 من 4" onclick="goToHomeProduct('featured-cagual',1)"></button>
+          <button class="carousel-dot" type="button" aria-label="المنتج 3 من 4" onclick="goToHomeProduct('featured-cagual',2)"></button>
+          <button class="carousel-dot" type="button" aria-label="المنتج 4 من 4" onclick="goToHomeProduct('featured-cagual',3)"></button>
+        </div>
+        <div class="featured-more"><a href="cagual.html" class="btn-secondary">شاهد المزيد من الكاجوال <i class="fas fa-arrow-left"></i></a></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq-section" id="faq">
+    <div class="container">
+      <h2 class="section-title">❓ الأسئلة الشائعة</h2>
+      <div class="faq-container">
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q"><span>كم تكلفة الشحن؟</span><i class="fas fa-chevron-down faq-icon"></i></div>
+          <div class="faq-a">التوصيل 80 جنيه للقاهرة، و120 جنيه للجيزة، و150 جنيه لباقي المحافظات.</div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q"><span>كم الوقت المتوقع للتسليم؟</span><i class="fas fa-chevron-down faq-icon"></i></div>
+          <div class="faq-a">من 2–5 أيام عمل حسب موقعك. القاهرة والجيزة عادةً 1–2 يوم 🚚.</div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q"><span>هل يمكن استرجاع المنتج؟</span><i class="fas fa-chevron-down faq-icon"></i></div>
+          <div class="faq-a">الاسترجاع في نفس وقت طلقي الاوردر</div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q"><span>ما طرق الدفع المتاحة؟</span><i class="fas fa-chevron-down faq-icon"></i></div>
+          <div class="faq-a">الدفع عند الاستلام 💵، إنستا باي، فودافون كاش. جميع الطرق متاحة وآمنة.</div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q"><span>هل المقاسات مناسبة لجميع الأجسام؟</span><i class="fas fa-chevron-down faq-icon"></i></div>
+          <div class="faq-a">نعم! المنتجات واسعة وفضفاضة لتناسب المقاسات المختلفة، وفي حال الشك تواصلي معنا على واتساب وهنساعدك تختاري 💕.</div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+          <div class="faq-q"><span>هل الألوان مطابقة للصور؟</span><i class="fas fa-chevron-down faq-icon"></i></div>
+          <div class="faq-a">نحرص على دقة الألوان وتصويرها بإضاءة طبيعية واضحة. في حال وجود أي تباين يسعدنا استبدالها لك فوراً 🌈.</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact-section" id="contact">
+    <div class="container">
+      <h2 class="section-title">📞 تواصل معنا</h2>
+      <div class="contact-links-wrap">
+        <a href="https://wa.me/201117500747" target="_blank" class="contact-card contact-wa">
+          <i class="fab fa-whatsapp"></i>
+          <div><strong>واتساب</strong><span>01117500747</span></div>
+          <i class="fas fa-arrow-left contact-arrow"></i>
+        </a>
+        <a href="tel:+201117500747" class="contact-card contact-phone">
+          <i class="fas fa-phone"></i>
+          <div><strong>اتصال مباشر</strong><span>01117500747</span></div>
+          <i class="fas fa-arrow-left contact-arrow"></i>
+        </a>
+        <a href="mailto:kashmerascarfwomen@gmail.com" class="contact-card contact-email">
+          <i class="fas fa-envelope"></i>
+          <div><strong>البريد الإلكتروني</strong><span>kashmerascarfwomen@gmail.com</span></div>
+          <i class="fas fa-arrow-left contact-arrow"></i>
+        </a>
+        <a href="https://www.instagram.com/kashmera_scarf_women?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" class="contact-card contact-insta">
+          <i class="fab fa-instagram"></i>
+          <div><strong>إنستجرام</strong><span>@kashmera_scarf_women</span></div>
+          <i class="fas fa-arrow-left contact-arrow"></i>
+        </a>
+        <a href="https://www.tiktok.com/@kashmer.scarf.women?is_from_webapp=1&sender_device=pc" target="_blank" class="contact-card contact-tiktok">
+          <i class="fab fa-tiktok"></i>
+          <div><strong>TikTok</strong><span>@kashmer.scarf.women</span></div>
+          <i class="fas fa-arrow-left contact-arrow"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="features-section">
+    <div class="container features-grid">
+      <div class="feature-card">
+        <i class="fas fa-truck-fast"></i>
+        <h3>شحن سريع وموثوق</h3>
+        <p>توصيل لجميع محافظات مصر في 3–5 أيام عمل</p>
+      </div>
+      <div class="feature-card">
+        <i class="fas fa-lock"></i>
+        <h3>وسائل دفع آمنة</h3>
+        <p>ادفعي عند الاستلام أو ببطاقتك الائتمانية بأمان</p>
+      </div>
+      <div class="feature-card">
+        <i class="fas fa-rotate-right"></i>
+        <h3>سياسة إرجاع مرنة</h3>
+        <p>استرجعي أو بدّلي المنتج خلال 14 يومًا</p>
+      </div>
+      <div class="feature-card">
+        <i class="fas fa-headset"></i>
+        <h3>دعم عملاء 24/7</h3>
+        <p>فريقنا جاهز للإجابة على جميع استفساراتك</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="main-footer">
+  <div class="container footer-content">
+    <div>
+      <span class="footer-brand-name">KASHMERA</span>
+      <p class="footer-brand-desc">متجرك الأول للاستايل الكاجوال والاسدالات المحتشمة بأجود الخامات وأحدث التصاميم العصرية.</p>
+      <div class="footer-social">
+        <a href="https://www.instagram.com/kashmera_scarf_women?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="https://www.tiktok.com/@kashmer.scarf.women?is_from_webapp=1&sender_device=pc" target="_blank" title="TikTok"><i class="fab fa-tiktok"></i></a>
+        <a href="https://wa.me/201117500747" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+      </div>
+    </div>
+    <div class="footer-section">
+      <h4>روابط مهمة</h4>
+      <ul>
+        <li><a href="#faq">الأسئلة الشائعة</a></li>
+        <li><a href="#">سياسة الخصوصية</a></li>
+        <li><a href="#">شروط الاستخدام</a></li>
+      </ul>
+    </div>
+    <div class="footer-section">
+      <h4>أقسام المتجر</h4>
+      <ul>
+        <li><a href="cagual.html">كاجوال خروج</a></li>
+        <li><a href="isdals.html">الاسدالات الراقية</a></li>
+        <li><a href="bestsellers.html">الأكثر مبيعاً</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    <p>© 2026 Kashmera — جميع الحقوق محفوظة</p>
+    <p>💳 الدفع عند الاستلام متاح</p>
+  </div>
+</footer>
+
+<!-- MOBILE NAV -->
+<nav class="mobile-nav-bar">
+  <a href="index.html" class="active"><i class="fas fa-home"></i><span>الرئيسية</span></a>
+  <a href="cagual.html"><i class="fas fa-store"></i><span>المنتجات</span></a>
+  <a href="#" onclick="openCart();return false"><i class="fas fa-shopping-cart"></i><span>السلة</span></a>
+  <a href="account.html"><i class="fas fa-user"></i><span>حسابي</span></a>
+</nav>
+
+<!-- SIDE CART -->
+<div class="cart-overlay" id="cart-overlay" onclick="closeCart()"></div>
+<div class="side-cart" id="side-cart">
+  <div class="cart-header">
+    <h3><i class="fas fa-shopping-cart" style="margin-left:8px"></i>سلة التسوق</h3>
+    <button class="cart-close" onclick="closeCart()"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="cart-body" id="side-cart-items">
+    <p style="text-align:center;padding:40px 20px;color:var(--gray)">السلة فارغة 🛒</p>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-total-row">
+      <span class="cart-total-label">الإجمالي</span>
+      <span class="cart-total-val" id="side-cart-total">0 جنيه</span>
+    </div>
+    <button class="btn-primary btn-large" onclick="location.href='checkout.html'">إتمام الشراء 💳</button>
+  </div>
+</div>
+
+<!-- WHATSAPP -->
+<a href="https://wa.me/201117500747" class="whatsapp-btn" target="_blank" title="واتساب">
+  <i class="fab fa-whatsapp"></i>
+</a>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+<script src="script.js"></script>
+<script>
+// ══════════════════════════════════════════
+// FAQ ACCORDION
+// ══════════════════════════════════════════
+function toggleFaq(el) {
+  const isOpen = el.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+  if (!isOpen) el.classList.add('open');
+}
+
+function scrollHomeProducts(gridId, direction) {
+  const track = document.getElementById(gridId);
+  if (track) track.scrollBy({ left: direction * track.clientWidth, behavior: 'smooth' });
+}
+
+function goToHomeProduct(trackId, index) {
+  const track = document.getElementById(trackId);
+  const product = track && track.children[index];
+  if (product) product.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+}
+
+function updateHomeProductDots(trackId) {
+  const track = document.getElementById(trackId);
+  const pagination = document.querySelector(`[data-track="${trackId}"]`);
+  if (!track || !pagination || !track.children.length) return;
+  const trackRight = track.getBoundingClientRect().right;
+  let activeIndex = 0;
+  let nearestDistance = Infinity;
+  Array.from(track.children).forEach((product, index) => {
+    const distance = Math.abs(product.getBoundingClientRect().right - trackRight);
+    if (distance < nearestDistance) {
+      nearestDistance = distance;
+      activeIndex = index;
+    }
+  });
+  pagination.querySelectorAll('.carousel-dot').forEach((dot, index) => {
+    const isActive = index === activeIndex;
+    dot.classList.toggle('active', isActive);
+    if (isActive) dot.setAttribute('aria-current', 'true');
+    else dot.removeAttribute('aria-current');
+  });
+}
+
+// Override filterProducts for index page hot tab
+const _orig = window.filterProducts;
+window.filterProducts = function(cat, btn) {
+  document.querySelectorAll('.ftab').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  const grid = document.getElementById('products-grid');
+  if (!grid) return;
+  let items = Object.values(products);
+  if (cat === 'hot') {
+    items = items.slice(0, 6);
+  } else if (cat !== 'all') {
+    items = items.filter(p => p.category === cat);
+  }
+  grid.innerHTML = items.map(p => `
+    <div class="product-card">
+      <div class="product-image">
+        <img src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+        <span class="product-badge">${p.category}</span>
+      </div>
+      <div class="product-info">
+        <h3>${p.name}</h3>
+        <p class="product-code">كود: ${p.id}</p>
+        <div class="product-rating">⭐ ${p.rating}</div>
+        <p class="product-price">${p.price} جنيه</p>
+        <div class="product-actions">
+          <a href="product.html?id=${p.id}" class="btn-primary">عرض التفاصيل</a>
+          <button class="btn-secondary" onclick="addToCart('${p.id}','${p.name}',${p.price})">أضف للسلة</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+// ══════════════════════════════════════════
+// Render featured sections on index
+// ══════════════════════════════════════════
+function renderFeatured() {
+  const isdGrid = document.getElementById('featured-isdals');
+  const cagGrid = document.getElementById('featured-cagual');
+  const bestGrid = document.getElementById('bestsellers-grid');
+  if (!isdGrid || !cagGrid || !bestGrid) return;
+  const items = Object.values(products);
+  const render = (list) => list.map(p => `
+    <div class="product-card">
+      <div class="product-image">
+        <img src="${p.image || p.img || (p.imgs && p.imgs[0]) || 'images/placeholder.jpg'}" alt="${p.name}" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+        <span class="product-badge">${p.badge || p.category}</span>
+      </div>
+      <div class="product-info">
+        <h3>${p.name}</h3>
+        <p class="product-code">كود: ${p.id}</p>
+        <div class="product-rating">⭐ ${p.rating}</div>
+        <p class="product-price">${p.price} جنيه</p>
+        <div class="product-actions">
+          <a href="product.html?id=${p.id}" class="btn-primary">عرض التفاصيل</a>
+          <button class="btn-secondary" onclick="addToCart('${p.id}','${p.name}',${p.price})">أضف للسلة</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+
+  const bestsellerIds = ['T009-BEIGE', 'ISD-SATAN-1', 'ISD-SATAN-2', 'TSHIRT-BLK'];
+  const bestsellerSet = new Set(bestsellerIds);
+  const cagualIds = items.filter(p => p.category === 'كاجوال' && !bestsellerSet.has(p.id)).slice(0, 4).map(p => p.id);
+  const isdalIds = items.filter(p => p.category === 'الاسدالات' && !bestsellerSet.has(p.id)).slice(0, 4).map(p => p.id);
+
+  bestGrid.innerHTML = render(bestsellerIds.map(id => products[id]).filter(Boolean));
+  cagGrid.innerHTML = render(cagualIds.map(id => products[id]).filter(Boolean));
+  isdGrid.innerHTML = render(isdalIds.map(id => products[id]).filter(Boolean));
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  try { renderFeatured(); } catch(e) {}
+  document.querySelectorAll('.home-products-track').forEach(track => {
+    track.addEventListener('scroll', () => updateHomeProductDots(track.id), { passive: true });
+    updateHomeProductDots(track.id);
+  });
+});
+</script>
+</body>
+</html>

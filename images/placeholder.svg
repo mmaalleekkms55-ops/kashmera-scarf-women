@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000" viewBox="0 0 800 1000">
+  <rect width="800" height="1000" fill="#f7f7f5"/>
+  <rect x="40" y="40" width="720" height="920" rx="28" fill="#ffffff" stroke="#e5e5e0" stroke-width="4"/>
+  <circle cx="400" cy="420" r="140" fill="#eceae4"/>
+  <path d="M270 640c30-110 120-170 200-170 70 0 130 46 160 140" fill="none" stroke="#d2cfc6" stroke-width="24" stroke-linecap="round"/>
+  <text x="400" y="780" text-anchor="middle" font-family="Tajawal, Arial, sans-serif" font-size="44" fill="#777">لا توجد صورة</text>
+  <text x="400" y="835" text-anchor="middle" font-family="Tajawal, Arial, sans-serif" font-size="24" fill="#999">سيتم استبدالها قريبًا</text>
+</svg>

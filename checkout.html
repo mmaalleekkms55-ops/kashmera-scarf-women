@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>إتمام الشراء – Kashmera</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    .page-hero{background:var(--navy);color:white;padding:32px 0 24px;text-align:center}
+    .page-hero h1{font-size:clamp(20px,2.5vw,28px);font-weight:800;margin-bottom:6px}
+    .page-hero p{font-size:13.5px;color:rgba(200,220,240,.8)}
+
+    /* steps bar */
+    .steps-bar{background:white;border-bottom:1px solid var(--border);padding:18px 0}
+    .steps{display:flex;justify-content:center;align-items:center;gap:0}
+    .step{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--gray)}
+    .step-num{width:28px;height:28px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;transition:all .3s}
+    .step.active .step-num{background:var(--navy);color:white}
+    .step.done .step-num{background:var(--pink);color:white}
+    .step.active{color:var(--navy)}
+    .step.done{color:var(--pink)}
+    .step-line{width:50px;height:2px;background:var(--border);margin:0 6px}
+    .step-line.done{background:var(--pink)}
+
+    /* layout */
+    .checkout-wrap{display:grid;grid-template-columns:1fr 380px;gap:28px;padding:36px 0 80px;align-items:start}
+
+    /* form card */
+    .form-card{background:white;border:1px solid var(--border);border-radius:18px;padding:28px}
+    .form-card h2{font-size:16px;font-weight:800;color:var(--navy);margin-bottom:22px;padding-bottom:12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+    .form-card h2 i{color:var(--pink);font-size:18px}
+
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+    .form-group{margin-bottom:14px}
+    .form-group label{display:block;font-size:12.5px;font-weight:700;color:var(--navy);margin-bottom:6px}
+    .form-group input,.form-group select,.form-group textarea{
+      width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;
+      font-family:'Tajawal',sans-serif;font-size:13.5px;color:var(--dark);
+      outline:none;transition:border-color .2s;background:var(--cream);
+    }
+    .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--navy);background:white}
+    .form-group textarea{resize:vertical;min-height:80px}
+    .form-group .hint{font-size:11px;color:var(--gray);margin-top:4px}
+
+    /* payment options */
+    .pay-options{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+    .pay-opt{display:flex;align-items:center;gap:12px;padding:14px 16px;border:1.5px solid var(--border);border-radius:12px;cursor:pointer;transition:all .2s}
+    .pay-opt:hover{border-color:var(--navy)}
+    .pay-opt.selected{border-color:var(--navy);background:rgba(12,35,64,.04)}
+    .pay-opt input[type=radio]{accent-color:var(--navy);width:16px;height:16px;flex-shrink:0}
+    .pay-opt-label{flex:1}
+    .pay-opt-label strong{display:block;font-size:13.5px;color:var(--navy)}
+    .pay-opt-label span{font-size:11.5px;color:var(--gray)}
+    .pay-opt-icon{font-size:22px;color:var(--navy);width:28px;text-align:center}
+
+    /* order summary */
+    .summary-card{background:white;border:1px solid var(--border);border-radius:18px;padding:24px;position:sticky;top:145px}
+    .summary-card h2{font-size:16px;font-weight:800;color:var(--navy);margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+    .summary-card h2 i{color:var(--pink)}
+
+    .summary-items{max-height:320px;overflow-y:auto;margin-bottom:16px}
+    .sum-item{display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--warm)}
+    .sum-item:last-child{border-bottom:none}
+    .sum-item img{width:56px;height:56px;border-radius:10px;object-fit:cover;border:1px solid var(--border);flex-shrink:0}
+    .sum-item-info{flex:1}
+    .sum-item-info h4{font-size:12.5px;font-weight:700;color:var(--navy);margin-bottom:3px;line-height:1.3}
+    .sum-item-info .sum-color{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--gray)}
+    .sum-item-info .sum-color span{width:10px;height:10px;border-radius:50%;display:inline-block;border:1px solid rgba(0,0,0,.1)}
+    .sum-item-price{font-size:13.5px;font-weight:800;color:var(--pink);white-space:nowrap}
+
+    .empty-cart-msg{text-align:center;padding:30px 10px;color:var(--gray)}
+    .empty-cart-msg i{font-size:40px;opacity:.3;display:block;margin-bottom:10px}
+
+    .sum-divider{height:1px;background:var(--border);margin:14px 0}
+    .sum-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:13px}
+    .sum-row.total{font-size:17px;font-weight:800;color:var(--navy);margin-top:4px}
+    .sum-row .val{font-weight:700}
+    .sum-row.total .val{color:var(--pink);font-size:20px}
+
+    .sum-note{background:rgba(12,35,64,.04);border-radius:10px;padding:10px 14px;font-size:12px;color:var(--navy);margin-bottom:16px;line-height:1.7}
+    .sum-note i{color:var(--pink);margin-left:4px}
+    /* discount */
+    .coupon-box{display:flex;gap:8px;margin-bottom:4px}
+    .coupon-box input{flex:1;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;font-family:'Tajawal',sans-serif;font-size:13px;outline:none;transition:border-color .2s;background:var(--cream)}
+    .coupon-box input:focus{border-color:var(--navy);background:white}
+    .coupon-box input.applied{border-color:#2E8B57;background:#f0fdf4}
+    .coupon-box input.invalid{border-color:#e53e3e;background:#fff5f5}
+    .coupon-btn{padding:10px 16px;background:var(--navy);color:white;border:none;border-radius:10px;font-family:'Tajawal',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap}
+    .coupon-btn:hover{background:var(--pink)}
+    .coupon-btn:disabled{opacity:.6;cursor:not-allowed}
+    .coupon-msg{font-size:12px;font-weight:700;min-height:18px;margin-bottom:10px;display:flex;align-items:center;gap:5px}
+    .coupon-msg.ok{color:#2E8B57}
+    .coupon-msg.err{color:#e53e3e}
+    .sum-row.discount .val{color:#2E8B57;font-weight:800}
+
+    .btn-confirm{
+      background:var(--pink);color:white;border:none;width:100%;
+      padding:16px;border-radius:50px;font-size:15px;font-weight:800;
+      cursor:pointer;transition:all .3s;font-family:'Tajawal',sans-serif;
+      box-shadow:0 6px 20px rgba(255,30,140,.25);
+    }
+    .btn-confirm:hover{background:var(--pink2);transform:translateY(-2px);box-shadow:0 10px 28px rgba(255,30,140,.3)}
+    .btn-confirm:disabled{opacity:.5;cursor:not-allowed;transform:none}
+    .btn-back{
+      display:block;text-align:center;margin-top:12px;
+      font-size:13px;color:var(--gray);font-weight:600;cursor:pointer;
+      transition:color .2s;
+    }
+    .btn-back:hover{color:var(--navy)}
+
+    /* success overlay */
+    .success-overlay{
+      display:none;position:fixed;inset:0;
+      background:rgba(12,35,64,.7);z-index:3000;
+      align-items:center;justify-content:center;
+    }
+    .success-overlay.show{display:flex}
+    .success-box{
+      background:white;border-radius:24px;padding:44px 36px;
+      text-align:center;max-width:420px;width:90%;
+      animation:popUp .4s cubic-bezier(.175,.885,.32,1.275);
+    }
+    @keyframes popUp{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:none}}
+    .success-icon{font-size:64px;margin-bottom:16px;display:block}
+    .success-box h2{font-size:22px;font-weight:800;color:var(--navy);margin-bottom:10px}
+    .success-box p{font-size:14px;color:#666;line-height:1.8;margin-bottom:24px}
+    .success-order-id{background:var(--cream);border:1px solid var(--border);border-radius:10px;padding:10px 18px;font-size:13px;font-weight:700;color:var(--navy);margin-bottom:24px;display:inline-block}
+    .success-wa{
+      background:#25D366;color:white;border:none;width:100%;
+      padding:14px;border-radius:50px;font-size:14px;font-weight:700;
+      cursor:pointer;font-family:'Tajawal',sans-serif;margin-bottom:10px;
+      transition:all .2s;
+    }
+    .success-wa:hover{background:#1da851}
+    .success-home{
+      background:white;color:var(--navy);border:1.5px solid var(--border);
+      width:100%;padding:13px;border-radius:50px;font-size:14px;font-weight:700;
+      cursor:pointer;font-family:'Tajawal',sans-serif;transition:all .2s;
+    }
+    .success-home:hover{border-color:var(--navy)}
+
+    /* validation */
+    .form-group input.err,.form-group select.err{border-color:#e53e3e;background:#fff5f5}
+    .err-msg{font-size:11.5px;color:#e53e3e;margin-top:4px;display:none}
+    .err-msg.show{display:block}
+
+    @media(max-width:900px){
+      .checkout-wrap{grid-template-columns:1fr}
+      .summary-card{position:static;order:0}
+    }
+    @media(max-width:600px){
+      .form-row{grid-template-columns:1fr}
+      .steps{gap:0}.step-line{width:30px}
+      .step span{display:none}
+    }
+  </style>
+</head>
+<body>
+
+<!-- PROMO BAR -->
+<div class="top-promo-banner">
+  <div class="promo-text-container">
+    <span class="promo-text">🚚 توصيل القاهرة <b>80 جنيه</b> والجيزة <b>120 جنيه</b></span>
+    <span class="promo-text">✨ اشتري 2 واحصلي على خصم <b>15%</b></span>
+    <span class="promo-text">🔥 خصومات تصل إلى <b>50%</b></span>
+    <span class="promo-text">💳 الدفع عند الاستلام <b>متاح</b></span>
+    <span class="promo-text">🌟 ضمان استرجاع <b>14 يوم</b></span>
+    <span class="promo-text">🚚 توصيل القاهرة <b>80 جنيه</b> والجيزة <b>120 جنيه</b></span>
+    <span class="promo-text">✨ اشتري 2 واحصلي على خصم <b>15%</b></span>
+    <span class="promo-text">🔥 خصومات تصل إلى <b>50%</b></span>
+    <span class="promo-text">💳 الدفع عند الاستلام <b>متاح</b></span>
+    <span class="promo-text">🌟 ضمان استرجاع <b>14 يوم</b></span>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header class="main-header">
+  <div class="container header-container">
+    <div class="search-area">
+      <i class="fas fa-search"></i>
+      <input type="text" placeholder="ابحثي عن منتج...">
+    </div>
+    <div class="logo">
+      <a href="index.html">
+        <img src="images/Gemini_Generated_Image_h6itgfh6itgfh6it.png" alt="Kashmera">
+      </a>
+    </div>
+    <div class="icons-area">
+      <a href="#" class="icon-link" onclick="openCart();return false" title="السلة">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="cart-badge" id="cart-count">0</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<nav class="main-nav">
+  <div class="container">
+    <ul>
+      <li><a href="index.html" class="active">الرئيسية</a></li>
+      <li><a href="cagual.html">كاجوال</a></li>
+      <li><a href="isdals.html">الاسدالات</a></li>
+      <li><a href="#contact">تواصل معنا</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="container">
+    <h1>🛍️ إتمام الشراء</h1>
+    <p>خطوة أخيرة وطلبك في طريقه إليكِ!</p>
+  </div>
+</div>
+
+<!-- STEPS BAR -->
+<div class="steps-bar">
+  <div class="steps">
+    <div class="step done" id="step1">
+      <div class="step-num"><i class="fas fa-check" style="font-size:10px"></i></div>
+      <span>السلة</span>
+    </div>
+    <div class="step-line done"></div>
+    <div class="step active" id="step2">
+      <div class="step-num">2</div>
+      <span>بياناتك</span>
+    </div>
+    <div class="step-line"></div>
+    <div class="step" id="step3">
+      <div class="step-num">3</div>
+      <span>تأكيد الطلب</span>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main class="container">
+  <div class="checkout-wrap">
+
+    <!-- ── LEFT: FORM ── -->
+    <div>
+
+      <!-- بيانات العميل -->
+      <div class="form-card" style="margin-bottom:20px">
+        <h2><i class="fas fa-user-circle"></i> بياناتك الشخصية</h2>
+        <div class="form-row">
+          <div class="form-group">
+            <label>الاسم الأول *</label>
+            <input type="text" id="fname" placeholder="مثال: سارة">
+            <div class="err-msg" id="fname-err">هذا الحقل مطلوب</div>
+          </div>
+          <div class="form-group">
+            <label>الاسم الأخير</label>
+            <input type="text" id="lname" placeholder="مثال: أحمد">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>رقم الهاتف (واتساب) *</label>
+          <input type="tel" id="phone" placeholder="01XXXXXXXXX">
+          <div class="err-msg" id="phone-err">رقم هاتف غير صحيح</div>
+        </div>
+        <div class="form-group">
+          <label>البريد الإلكتروني <span style="color:var(--gray);font-weight:400">(اختياري)</span></label>
+          <input type="email" id="email" placeholder="example@mail.com">
+        </div>
+      </div>
+
+      <!-- عنوان الشحن -->
+      <div class="form-card" style="margin-bottom:20px">
+        <h2><i class="fas fa-map-marker-alt"></i> عنوان الشحن</h2>
+        <div class="form-group">
+          <label>المحافظة *</label>
+          <select id="governorate">
+            <option value="">اختاري المحافظة</option>
+            <option>القاهرة</option><option>الجيزة</option><option>الإسكندرية</option>
+            <option>الدقهلية</option><option>البحر الأحمر</option><option>البحيرة</option>
+            <option>الفيوم</option><option>الغربية</option><option>الإسماعيلية</option>
+            <option>المنوفية</option><option>المنيا</option><option>القليوبية</option>
+            <option>الوادي الجديد</option><option>السويس</option><option>أسوان</option>
+            <option>أسيوط</option><option>بني سويف</option><option>بورسعيد</option>
+            <option>دمياط</option><option>جنوب سيناء</option><option>كفر الشيخ</option>
+            <option>مطروح</option><option>الأقصر</option><option>قنا</option>
+            <option>شمال سيناء</option><option>سوهاج</option>
+          </select>
+          <div class="err-msg" id="gov-err">اختاري المحافظة</div>
+        </div>
+        <div class="form-group">
+          <label>المدينة / المركز *</label>
+          <input type="text" id="city" placeholder="مثال: مدينة نصر">
+          <div class="err-msg" id="city-err">هذا الحقل مطلوب</div>
+        </div>
+        <div class="form-group">
+          <label>العنوان بالتفصيل *</label>
+          <textarea id="address" placeholder="الشارع، رقم المبنى، الدور، الشقة..."></textarea>
+          <div class="err-msg" id="addr-err">أدخلي العنوان بالتفصيل</div>
+        </div>
+        <div class="form-group">
+          <label>علامة مميزة <span style="color:var(--gray);font-weight:400">(اختياري)</span></label>
+          <input type="text" id="landmark" placeholder="مثال: قريب من مسجد / محطة مترو...">
+          <div class="hint">تساعدنا في التوصيل بشكل أسرع</div>
+        </div>
+      </div>
+
+      <!-- طريقة الدفع -->
+      <div class="form-card">
+        <h2><i class="fas fa-credit-card"></i> طريقة الدفع</h2>
+        <div class="pay-options">
+          <label class="pay-opt selected" id="pay-cod">
+            <input type="radio" name="payment" value="cod" checked onchange="selectPay(this.closest('.pay-opt'))">
+            <div class="pay-opt-icon"><i class="fas fa-money-bill-wave" style="color:#2E8B57"></i></div>
+            <div class="pay-opt-label">
+              <strong>الدفع عند الاستلام (كاش)</strong>
+              <span>ادفعي لما يوصلك الطلب – متاح في كل مصر</span>
+            </div>
+          </label>
+          <label class="pay-opt" id="pay-insta">
+            <input type="radio" name="payment" value="instapay" onchange="selectPay(this.closest('.pay-opt'))">
+            <div class="pay-opt-icon"><i class="fas fa-mobile-alt" style="color:#6B21A8"></i></div>
+            <div class="pay-opt-label">
+              <strong>إنستا باي / فودافون كاش</strong>
+              <span>تحويل إلكتروني سريع وآمن</span>
+            </div>
+          </label>
+        </div>
+        <div id="instapay-note" style="display:none;background:#f3e8ff;border:1px solid #d8b4fe;border-radius:10px;padding:12px 14px;font-size:13px;color:#4c1d95;margin-top:4px">
+          <i class="fas fa-info-circle" style="margin-left:6px"></i>
+          بعد تأكيد الطلب هيتواصل معاكِ فريقنا عبر واتساب لإرسال بيانات التحويل.
+        </div>
+        <div class="form-group" style="margin-top:16px;margin-bottom:0">
+          <label>ملاحظات إضافية <span style="color:var(--gray);font-weight:400">(اختياري)</span></label>
+          <textarea id="notes" placeholder="أي ملاحظات خاصة بطلبك..."></textarea>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── RIGHT: ORDER SUMMARY ── -->
+    <div class="summary-card">
+      <h2><i class="fas fa-shopping-bag"></i> ملخص الطلب</h2>
+
+      <div class="summary-items" id="summary-items">
+        <div class="empty-cart-msg">
+          <i class="fas fa-shopping-cart"></i>
+          السلة فارغة! <a href="index.html" style="color:var(--pink);font-weight:700">تسوقي الآن</a>
+        </div>
+      </div>
+
+      <!-- COUPON -->
+      <div style="margin-bottom:12px">
+        <div style="font-size:12.5px;font-weight:700;color:var(--navy);margin-bottom:7px">
+          <i class="fas fa-tag" style="color:var(--pink);margin-left:5px"></i>كود الخصم
+        </div>
+        <div class="coupon-box">
+          <input type="text" id="coupon-input" placeholder="أدخلي كود الخصم..." maxlength="20"
+            oninput="this.value=this.value.toUpperCase()">
+          <button class="coupon-btn" id="coupon-btn" onclick="applyCoupon()">تطبيق</button>
+        </div>
+        <div class="coupon-msg" id="coupon-msg"></div>
+      </div>
+
+      <div class="sum-divider"></div>
+
+      <div class="sum-row">
+        <span>المجموع الفرعي</span>
+        <span class="val" id="subtotal">0 جنيه</span>
+      </div>
+      <div class="sum-row" id="shipping-row">
+        <span>الشحن</span>
+        <span class="val" id="shipping-val">اختاري المحافظة</span>
+      </div>
+      <div class="sum-row discount" id="discount-row" style="display:none">
+        <span>الخصم <span id="discount-label" style="color:var(--pink);font-size:11px"></span></span>
+        <span class="val" id="discount-val">0 جنيه-</span>
+      </div>
+      <div class="sum-divider"></div>
+      <div class="sum-row total">
+        <span>الإجمالي الكلي</span>
+        <span class="val" id="total-val">0 جنيه</span>
+      </div>
+
+      <div class="sum-note" style="margin-top:14px">
+        <i class="fas fa-truck"></i> القاهرة 80 جنيه · الجيزة 120 جنيه · باقي المحافظات 150 جنيه<br>
+        <i class="fas fa-shield-alt"></i> ضمان استرجاع 14 يوم<br>
+        <i class="fas fa-lock"></i> بياناتك محمية وآمنة 100%
+      </div>
+
+      <button class="btn-confirm" id="confirm-btn" onclick="confirmOrder()">
+        <i class="fas fa-check-circle" style="margin-left:8px"></i>
+        تأكيد الطلب
+      </button>
+      <a href="javascript:history.back()" class="btn-back">
+        <i class="fas fa-arrow-right" style="margin-left:6px"></i>
+        العودة للتسوق
+      </a>
+    </div>
+
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer class="main-footer">
+  <div class="container footer-content">
+    <div>
+      <span class="footer-brand-name">KASHMERA</span>
+      <p class="footer-brand-desc">متجرك الأول للطرح والملابس المحتشمة.</p>
+      <div class="footer-social">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-tiktok"></i></a>
+        <a href="https://wa.me/201117500747" target="_blank"><i class="fab fa-whatsapp"></i></a>
+      </div>
+    </div>
+    <div class="footer-section">
+      <h4>أقسام المتجر</h4>
+      <ul>
+        <li><a href="cagual.html">كاجوال</a></li>
+        <li><a href="isdals.html">الاسدالات</a></li>
+      </ul>
+    </div>
+    <div class="footer-section">
+      <h4>روابط مهمة</h4>
+      <ul>
+        <li><a href="index.html#contact">تواصل معنا</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    <p>© 2026 Kashmera — جميع الحقوق محفوظة</p>
+    <p>💳 الدفع عند الاستلام متاح</p>
+  </div>
+</footer>
+
+<nav class="mobile-nav-bar">
+  <a href="index.html"><i class="fas fa-home"></i><span>الرئيسية</span></a>
+  <a href="cagual.html"><i class="fas fa-store"></i><span>المنتجات</span></a>
+  <a href="#" onclick="openCart();return false" class="active"><i class="fas fa-shopping-cart"></i><span>السلة</span></a>
+</nav>
+
+<a href="https://wa.me/201117500747" class="whatsapp-btn" target="_blank"><i class="fab fa-whatsapp"></i></a>
+
+<!-- SUCCESS OVERLAY -->
+<div class="success-overlay" id="success-overlay">
+  <div class="success-box">
+    <span class="success-icon">🎉</span>
+    <h2>تم استلام طلبك!</h2>
+    <p>شكراً لكِ على ثقتك في Kashmera.<br>سنتواصل معكِ خلال 24 ساعة لتأكيد الطلب.</p>
+    <div class="success-order-id" id="success-order-id">رقم الطلب: KSH-XXXXXXX</div>
+
+    <div id="wa-fallback-banner" style="display:none; background:#fff4e5; border:1px solid #ffcf8f; color:#7a4a00; border-radius:12px; padding:12px 14px; font-size:13px; line-height:1.6; margin-bottom:16px; text-align:right;">
+      ⚠️ يمكن صفحة واتساب ما فتحتش تلقائي (المتصفح بيمنع كده أحياناً). محدش هيضيع طلبك، بس اضغطي على زرار "تواصلي معنا على واتساب" تحت، أو زرار النسخ عشان تبعتيه بنفسك.
+    </div>
+
+    <button class="success-wa" onclick="sendWhatsApp()">
+      <i class="fab fa-whatsapp" style="margin-left:8px"></i>
+      تواصلي معنا على واتساب
+    </button>
+    <button class="success-home" onclick="copyOrderDetails()" style="margin-top:8px;">
+      <i class="fas fa-copy" style="margin-left:8px"></i>
+      نسخ تفاصيل الطلب
+    </button>
+    <button class="success-home" onclick="location.href='index.html'">
+      <i class="fas fa-home" style="margin-left:8px"></i>
+      العودة للصفحة الرئيسية
+    </button>
+  </div>
+</div>
+
+<!-- SIDE CART (for badge update) -->
+<div class="cart-overlay" id="cart-overlay" onclick="closeCart()"></div>
+<div class="side-cart" id="side-cart">
+  <div class="cart-header">
+    <h3><i class="fas fa-shopping-cart" style="margin-left:8px"></i>سلة التسوق</h3>
+    <button class="cart-close" onclick="closeCart()"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="cart-body" id="side-cart-items">
+    <p style="text-align:center;padding:40px 20px;color:var(--gray)">السلة فارغة 🛒</p>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-total-row">
+      <span class="cart-total-label">الإجمالي</span>
+      <span class="cart-total-val" id="side-cart-total">0 جنيه</span>
+    </div>
+    <button class="btn-primary btn-large" onclick="location.href='checkout.html'">إتمام الشراء 💳</button>
+  </div>
+</div>
+
+<script>
+// ── API BASE (بيشتغل صح سواء فتحتي الموقع من Live Server أو من السيرفر نفسه) ──
+// لو الصفحة متفتحة من بورت غير 3000 (زي Live Server 5500)، الطلبات هتتوجه لـ localhost:3000 تلقائياً
+const API_BASE = (location.port && location.port !== '3000') ? `${location.protocol}//${location.hostname}:3000` : '';
+// ── DISCOUNT CODES ──
+// عدلي الأكواد دي زي ما تحبي
+const COUPONS = {
+  'KASH10':      { type:'percent', value:10,  label:'خصم 10%',   minOrder:0   },
+  'KASHMERA10':  { type:'percent', value:10,  label:'خصم 10%',   minOrder:0   },
+  'KASHMERA20':  { type:'percent', value:20,  label:'خصم 20%',   minOrder:0   },
+  'KASHMERA50':  { type:'percent', value:50,  label:'خصم 50%',   minOrder:500 },
+  'WELCOME':     { type:'percent', value:15,  label:'خصم ترحيبي 15%', minOrder:0 },
+  'FREESHIP':    { type:'shipping',value:0,   label:'شحن مجاني', minOrder:0   },
+  'SAVE100':     { type:'fixed',   value:100, label:'خصم 100 جنيه', minOrder:300 },
+  'SAVE50':      { type:'fixed',   value:50,  label:'خصم 50 جنيه',  minOrder:200 },
+  'VIP':         { type:'percent', value:30,  label:'خصم VIP 30%',  minOrder:0   },
+};
+
+let appliedCoupon = null;
+
+function applyCoupon() {
+  const input = document.getElementById('coupon-input');
+  const btn   = document.getElementById('coupon-btn');
+  const msg   = document.getElementById('coupon-msg');
+  const code  = input.value.trim().toUpperCase();
+
+  if (!code) { showCouponMsg('أدخلي كود الخصم أولاً', false); return; }
+
+  const coupon = COUPONS[code];
+  if (!coupon) {
+    input.classList.add('invalid');
+    input.classList.remove('applied');
+    showCouponMsg('❌ الكود غير صحيح أو منتهي الصلاحية', false);
+    appliedCoupon = null;
+    renderSummary();
+    return;
+  }
+
+  const subtotal = cart.reduce((s,i) => s + (Number(i.price)||0) * (i.qty||i.quantity||1), 0);
+  if (coupon.minOrder && subtotal < coupon.minOrder) {
+    input.classList.add('invalid');
+    input.classList.remove('applied');
+    showCouponMsg(`❌ هذا الكود يشترط طلب بقيمة ${coupon.minOrder} جنيه على الأقل`, false);
+    appliedCoupon = null;
+    renderSummary();
+    return;
+  }
+
+  // valid!
+  appliedCoupon = { code, ...coupon };
+  input.classList.remove('invalid');
+  input.classList.add('applied');
+  input.disabled = true;
+  btn.textContent = 'إلغاء';
+  btn.onclick = removeCoupon;
+  showCouponMsg(`✅ تم تطبيق الكود – ${coupon.label}`, true);
+  renderSummary();
+}
+
+function removeCoupon() {
+  appliedCoupon = null;
+  const input = document.getElementById('coupon-input');
+  const btn   = document.getElementById('coupon-btn');
+  input.value = '';
+  input.disabled = false;
+  input.classList.remove('applied','invalid');
+  btn.textContent = 'تطبيق';
+  btn.onclick = applyCoupon;
+  document.getElementById('coupon-msg').textContent = '';
+  document.getElementById('coupon-msg').className = 'coupon-msg';
+  renderSummary();
+}
+
+function showCouponMsg(text, ok) {
+  const el = document.getElementById('coupon-msg');
+  el.textContent = text;
+  el.className = 'coupon-msg ' + (ok ? 'ok' : 'err');
+}
+
+function calcDiscount(subtotal, shipping) {
+  if (!appliedCoupon) return { discountAmt: 0, newShipping: shipping };
+  if (appliedCoupon.type === 'percent') {
+    return { discountAmt: Math.round(subtotal * appliedCoupon.value / 100), newShipping: shipping };
+  }
+  if (appliedCoupon.type === 'fixed') {
+    return { discountAmt: Math.min(appliedCoupon.value, subtotal), newShipping: shipping };
+  }
+  if (appliedCoupon.type === 'shipping') {
+    return { discountAmt: 0, newShipping: 0 };
+  }
+  return { discountAmt: 0, newShipping: shipping };
+}
+
+function getShippingCost() {
+  const governorate = document.getElementById('governorate')?.value;
+  if (!governorate) return 0;
+  if (governorate === 'القاهرة') return 80;
+  if (governorate === 'الجيزة') return 120;
+  return 150;
+}
+
+// ── CART ──
+let cart = JSON.parse(localStorage.getItem('kash_cart') || '[]');
+let orderId = '';
+let lastOrderTotal = 0;
+let lastOrderItems = [];
+let lastWaUrl = '';
+let lastWaText = '';
+
+function openCart(){document.getElementById('side-cart').classList.add('open');document.getElementById('cart-overlay').classList.add('show');document.body.style.overflow='hidden';renderSideCart();}
+function closeCart(){document.getElementById('side-cart').classList.remove('open');document.getElementById('cart-overlay').classList.remove('show');document.body.style.overflow='';}
+function normalizeItem(i){
+  return {
+    ...i,
+    uid: i.uid || i.id || (i.productId + '-' + Date.now()),
+    qty: Number(i.qty ?? i.quantity ?? 1),
+    price: Number(i.price) || 0,
+    img: i.img || i.image || 'images/placeholder.jpg',
+    color: i.color || i.option || null,
+    colorHex: i.colorHex || null,
+  };
+}
+
+function renderSideCart(){
+  const body=document.getElementById('side-cart-items'),tot=document.getElementById('side-cart-total');
+  if(!cart.length){body.innerHTML='<p style="text-align:center;padding:40px;color:var(--gray)">السلة فارغة 🛒</p>';tot.textContent='0 جنيه';return;}
+  const items=cart.map(normalizeItem);
+  body.innerHTML=items.map(i=>`
+    <div class="side-cart-item">
+      <img src="${i.img}" onerror="this.src='images/placeholder.jpg'" alt="${i.name}">
+      <div class="item-info">
+        <h4>${i.name}</h4>
+        ${i.color?`<div class="item-option">${i.color}</div>`:''}
+        <div class="item-price">${i.price} جنيه × ${i.qty}</div>
+      </div>
+    </div>`).join('');
+  tot.textContent=items.reduce((s,i)=>s+(i.price||0)*(i.qty||1),0)+' جنيه';
+}
+
+// ── RENDER SUMMARY ──
+function renderSummary() {
+  const container = document.getElementById('summary-items');
+  const subtotalEl = document.getElementById('subtotal');
+  const shippingEl = document.getElementById('shipping-val');
+  const totalEl    = document.getElementById('total-val');
+
+  if (!cart.length) {
+    container.innerHTML = `<div class="empty-cart-msg"><i class="fas fa-shopping-cart"></i>السلة فارغة! <a href="index.html" style="color:var(--pink);font-weight:700">تسوقي الآن</a></div>`;
+    subtotalEl.textContent = '0 جنيه';
+    shippingEl.textContent = '0 جنيه';
+    totalEl.textContent    = '0 جنيه';
+    document.getElementById('confirm-btn').disabled = true;
+    return;
+  }
+
+  // normalize all items (support both qty/img and quantity/image formats)
+  const items = cart.map(i => ({
+    ...i,
+    qty: i.qty ?? i.quantity ?? 1,
+    img: i.img || i.image || 'images/placeholder.jpg',
+  }));
+
+  container.innerHTML = items.map(item => `
+    <div class="sum-item">
+      <img src="${item.img}" onerror="this.src='images/placeholder.jpg'" alt="${item.name}">
+      <div class="sum-item-info">
+        <h4>${item.name}</h4>
+        ${item.color ? `<div class="sum-color"><span style="background:${item.colorHex||'#ccc'}"></span>${item.color}</div>` : ''}
+        <div style="font-size:11px;color:var(--gray)">الكمية: ${item.qty}</div>
+      </div>
+      <div class="sum-item-price">${(item.price||0) * (item.qty||1)} جنيه</div>
+    </div>`).join('');
+
+  const subtotal = items.reduce((s,i) => s + (i.price||0) * (i.qty||1), 0);
+  const baseShipping = getShippingCost();
+  const { discountAmt, newShipping } = calcDiscount(subtotal, baseShipping);
+  const total = subtotal - discountAmt + newShipping;
+
+  subtotalEl.textContent = subtotal + ' جنيه';
+  const hasGovernorate = Boolean(document.getElementById('governorate').value);
+  shippingEl.textContent = !hasGovernorate ? 'اختاري المحافظة' : newShipping === 0 ? 'مجاني' : newShipping + ' جنيه';
+  shippingEl.style.color = newShipping === 0 && hasGovernorate ? '#2E8B57' : '';
+
+  const discountRow = document.getElementById('discount-row');
+  const discountVal = document.getElementById('discount-val');
+  const discountLbl = document.getElementById('discount-label');
+  if (discountAmt > 0) {
+    discountRow.style.display = 'flex';
+    discountVal.textContent = '- ' + discountAmt + ' جنيه';
+    discountLbl.textContent = '(' + (appliedCoupon?.label || '') + ')';
+  } else {
+    discountRow.style.display = 'none';
+  }
+
+  totalEl.textContent = total + ' جنيه';
+  document.getElementById('cart-count').textContent = cart.reduce((s,i)=>s+(i.qty||i.quantity||1),0);
+}
+
+// ── PAYMENT SELECT ──
+function selectPay(el) {
+  document.querySelectorAll('.pay-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('instapay-note').style.display =
+    el.querySelector('input').value === 'instapay' ? 'block' : 'none';
+}
+
+// ── VALIDATION ──
+function validate() {
+  let ok = true;
+  const checks = [
+    { id:'fname',    errId:'fname-err', check: v => v.trim().length >= 2 },
+    { id:'phone',    errId:'phone-err', check: v => /^01[0125][0-9]{8}$/.test(v.trim()) },
+    { id:'governorate', errId:'gov-err', check: v => v !== '' },
+    { id:'city',     errId:'city-err',  check: v => v.trim().length >= 2 },
+    { id:'address',  errId:'addr-err',  check: v => v.trim().length >= 10 },
+  ];
+  checks.forEach(c => {
+    const el  = document.getElementById(c.id);
+    const err = document.getElementById(c.errId);
+    if (!c.check(el.value)) {
+      el.classList.add('err'); err.classList.add('show'); ok = false;
+    } else {
+      el.classList.remove('err'); err.classList.remove('show');
+    }
+  });
+  return ok;
+}
+
+// clear error on type
+['fname','phone','governorate','city','address'].forEach(id => {
+  const el = document.getElementById(id);
+  if(el) el.addEventListener('input', () => {
+    el.classList.remove('err');
+    const err = document.getElementById(id.replace('governorate','gov')+'-err');
+    if(err) err.classList.remove('show');
+  });
+});
+document.getElementById('governorate')?.addEventListener('change', renderSummary);
+
+// ══════════════════════════════════════════
+// EMAIL NOTIFICATION — بيفتح إيميل جاهز بكل تفاصيل الطلب
+// ══════════════════════════════════════════
+function sendOrderEmail(order) {
+  const notifyEmail = localStorage.getItem('kashmera_notify_email') || 'kashmerascarfwomen@gmail.com';
+
+  // بناء قائمة المنتجات بالألوان
+  const itemLines = order.items.map(i => {
+    const name  = i.name  || '—';
+    const color = i.color ? ' | اللون: ' + i.color : '';
+    const hex   = i.colorHex ? ' (' + i.colorHex + ')' : '';
+    const qty   = i.qty || i.quantity || 1;
+    const price = Number(i.price) || 0;
+    return '  • ' + name + color + hex + ' × ' + qty + ' = ' + (price * qty) + ' ج';
+  }).join('\n');
+
+  const payLabel = order.payment === 'cod' ? 'دفع عند الاستلام 💵' : 'إنستا باي / فودافون كاش 📱';
+  const coupon   = order.coupon   ? '\n🏷️  كود الخصم: ' + order.coupon + ' (- ' + (order.discount||0) + ' ج)' : '';
+  const notes    = order.customer.notes ? '\n📝 ملاحظات: ' + order.customer.notes : '';
+
+  const subject = '🛍️ طلب جديد #' + order.id + ' — Kashmera';
+
+  const body = [
+    '🛍️  طلب جديد من Kashmera',
+    '━━━━━━━━━━━━━━━━━━━━━━━━━',
+    '🔖  رقم الطلب : ' + order.id,
+    '📅  التاريخ   : ' + order.date,
+    '',
+    '👤  بيانات العميل:',
+    '    الاسم   : ' + (order.customer.name  || '—'),
+    '    الهاتف  : ' + (order.customer.phone || '—'),
+    '    الإيميل : ' + (order.customer.email || '—'),
+    '',
+    '📍  عنوان الشحن:',
+    '    ' + (order.customer.gov  || '') + ' – ' + (order.customer.city || ''),
+    '    ' + (order.customer.addr || ''),
+    order.customer.landmark ? '    علامة: ' + order.customer.landmark : '',
+    '',
+    '🛒  المنتجات المطلوبة:',
+    itemLines,
+    '',
+    '━━━━━━━━━━━━━━━━━━━━━━━━━',
+    '💰  المجموع  : ' + order.subtotal + ' جنيه',
+    coupon,
+    '🚚  الشحن    : ' + (order.shipping === 0 ? 'مجاني 🎁' : order.shipping + ' جنيه'),
+    '💵  الإجمالي : ' + order.total + ' جنيه',
+    '💳  طريقة الدفع: ' + payLabel,
+    notes,
+    '',
+    '━━━━━━━━━━━━━━━━━━━━━━━━━',
+    'للتواصل مع العميل: https://wa.me/20' + (order.customer.phone||'').replace(/^0/,''),
+  ].filter(l => l !== null && l !== undefined).join('\n');
+
+  // فتح الإيميل جاهزاً
+  const mailto = 'mailto:' + notifyEmail
+    + '?subject=' + encodeURIComponent(subject)
+    + '&body='    + encodeURIComponent(body);
+
+  // log للمراجعة
+  console.log('📧 Order to:', notifyEmail);
+  console.log(body);
+
+  // حفظ الإيميل في نافذة جديدة
+  try { window.location.href = mailto; } catch(e) {}
+}
+
+// // ── CONFIRM ORDER ──
+function confirmOrder() {
+  if (!cart.length) { alert('السلة فارغة! أضيفي منتجات أولاً.'); return; }
+  if (!validate()) return;
+
+  // نفتح تاب فاضي دلوقتي (لسه جوه استجابة الضغطة على الزرار) عشان المتصفح ميعتبروش نافذة منبثقة لاحقًا
+  let waWindow = null;
+  try { waWindow = window.open('', '_blank'); } catch (e) { waWindow = null; }
+  const waBanner = document.getElementById('wa-fallback-banner');
+  if (waBanner) waBanner.style.display = 'none';
+
+  const btn = document.getElementById('confirm-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-left:8px"></i> جاري تأكيد الطلب...';
+
+  // build order
+  orderId = 'KSH-' + Date.now().toString().slice(-7);
+  const subtotal = cart.reduce((s,i) => s + (Number(i.price)||0) * (i.qty||i.quantity||1), 0);
+  const baseShipping = getShippingCost();
+  const { discountAmt, newShipping: shipping } = calcDiscount(subtotal, baseShipping);
+  const order = {
+    coupon: appliedCoupon ? appliedCoupon.code : null,
+    id: orderId,
+    date: new Date().toLocaleString('ar-EG'),
+    customer: {
+      name:  document.getElementById('fname').value.trim() + ' ' + document.getElementById('lname').value.trim(),
+      phone: document.getElementById('phone').value.trim(),
+      email: document.getElementById('email').value.trim(),
+      gov:   document.getElementById('governorate').value,
+      city:  document.getElementById('city').value.trim(),
+      addr:  document.getElementById('address').value.trim(),
+      landmark: document.getElementById('landmark').value.trim(),
+      notes: document.getElementById('notes').value.trim(),
+    },
+    payment: document.querySelector('input[name=payment]:checked').value,
+    items: cart,
+    subtotal, discount: discountAmt, shipping,
+    total: subtotal - discountAmt + shipping,
+  };
+
+  // محاولة اختيارية لحفظ نسخة عند السيرفر لو شغال (مش شرط، والطلب هيتبعت واتساب/إيميل في كل الأحوال)
+  fetch(`${API_BASE}/api/orders`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(order),
+  }).catch(err => console.warn('تعذر حفظ نسخة عند السيرفر (مش مشكلة، الطلب هيتبعت واتساب برضه):', err));
+
+  // الطلب بيوصل مباشرة عن طريق واتساب + إيميل، مش محتاج أي سيرفر يكون شغال
+  lastOrderTotal = order.total;
+  lastOrderItems = order.items;
+  sendOrderEmail(order);
+
+  // فتح واتساب تلقائيًا بتفاصيل الطلب، باستخدام التاب اللي اتحجز وقت الضغط على الزرار
+  lastWaText = buildWhatsAppText(order);
+  const waUrl = buildWhatsAppUrl(order);
+  lastWaUrl = waUrl;
+  let waOpenedOk = true;
+  if (waWindow) {
+    try { waWindow.location.href = waUrl; } catch (e) { waOpenedOk = false; }
+  } else {
+    // لو المتصفح منع فتح التاب من الأساس، نجرب تاني (ممكن يتحجب برضه، والزرار موجود كبديل)
+    const retryWindow = window.open(waUrl, '_blank');
+    waOpenedOk = !!retryWindow;
+  }
+
+  // حماية: لو فيه شك إن الواتساب ما فتحش (تاب اتقفل/اتمنع)، نظهر تنبيه واضح مع طرق بديلة بدل ما تضيع
+  setTimeout(() => {
+    const blocked = !waOpenedOk || (waWindow && waWindow.closed);
+    const banner = document.getElementById('wa-fallback-banner');
+    if (blocked && banner) banner.style.display = 'block';
+  }, 1200);
+
+  document.getElementById('success-order-id').textContent = 'رقم طلبك: ' + orderId;
+  document.getElementById('success-overlay').classList.add('show');
+  document.getElementById('step2').classList.remove('active');
+  document.getElementById('step2').classList.add('done');
+  document.getElementById('step2').querySelector('.step-num').innerHTML = '<i class="fas fa-check" style="font-size:10px"></i>';
+  document.querySelectorAll('.step-line')[1].classList.add('done');
+  document.getElementById('step3').classList.add('active');
+
+  localStorage.setItem('kash_cart', '[]');
+  cart = [];
+  renderSideCart();
+
+  btn.disabled = false;
+  btn.innerHTML = '<i class="fas fa-check-circle" style="margin-left:8px"></i> تأكيد الطلب';
+}
+
+
+// ── WHATSAPP ──
+function buildWhatsAppText(order) {
+  const itemsLine = (order.items || []).map(i => {
+    const qty = i.qty || i.quantity || 1;
+    return `${i.name} ×${qty}`;
+  }).join('، ');
+  return (
+    `🛍️ طلب جديد من Kashmera\n` +
+    `━━━━━━━━━━━━━━━\n` +
+    `رقم الطلب: ${order.id}\n` +
+    `الاسم: ${order.customer.name}\n` +
+    `الهاتف: ${order.customer.phone}\n` +
+    `المحافظة: ${order.customer.gov} – ${order.customer.city}\n` +
+    `العنوان: ${order.customer.addr}\n` +
+    `المنتجات: ${itemsLine}\n` +
+    `━━━━━━━━━━━━━━━\n` +
+    `الإجمالي: ${order.total} جنيه`
+  );
+}
+
+function buildWhatsAppUrl(order) {
+  return `https://wa.me/201117500747?text=${encodeURIComponent(buildWhatsAppText(order))}`;
+}
+
+// زرار "تواصلي معنا على واتساب" في شاشة النجاح: بيفتح نفس رسالة الطلب اللي اتبعتت، مش طلب جديد
+function sendWhatsApp() {
+  if (lastWaUrl) {
+    window.open(lastWaUrl, '_blank');
+  } else {
+    // احتياطي لو لأي سبب مفيش رابط محفوظ
+    const order = {
+      id: orderId,
+      customer: {
+        name:  document.getElementById('fname')?.value.trim() || '',
+        phone: document.getElementById('phone')?.value.trim() || '',
+        gov:   document.getElementById('governorate')?.value || '',
+        city:  document.getElementById('city')?.value.trim() || '',
+        addr:  document.getElementById('address')?.value.trim() || '',
+      },
+      items: lastOrderItems || [],
+      total: lastOrderTotal || 0,
+    };
+    window.open(buildWhatsAppUrl(order), '_blank');
+  }
+}
+
+// زرار احتياطي: نسخ تفاصيل الطلب كنص عادي (لو واتساب ما فتحش أو مش متاح خالص على الجهاز)
+function copyOrderDetails() {
+  const text = lastWaText || '';
+  const done = () => alert('✅ تم نسخ تفاصيل الطلب، تقدري تلصقيها في أي مكان (واتساب، ماسنجر، إيميل...)');
+  const fail = () => {
+    // fallback أخير: نافذة اختيار نص يدوي لو الـ Clipboard API مش متاحة
+    window.prompt('انسخي النص ده يدوياً:', text);
+  };
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text).then(done).catch(fail);
+  } else {
+    fail();
+  }
+}
+
+// ── INIT ──
+renderSummary();
+renderSideCart();
+</script>
+</body>
+</html>

@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>الاسدالات – Kashmera</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    .page-hero{background:var(--navy);color:white;padding:40px 0 28px;text-align:center}
+    .page-hero h1{font-size:clamp(22px,3vw,34px);font-weight:800;margin-bottom:8px}
+    .page-hero p{font-size:14px;color:rgba(200,220,240,.8)}
+    .categories-nav{display:flex;justify-content:center;gap:10px;padding:24px 0 8px;flex-wrap:wrap}
+    .cat-btn{padding:9px 24px;border-radius:50px;border:1.5px solid var(--border);background:white;font-family:'Tajawal',sans-serif;font-size:13px;font-weight:700;color:var(--gray);cursor:pointer;transition:all var(--trans)}
+    .cat-btn:hover,.cat-btn.active{background:var(--navy);color:white;border-color:var(--navy)}
+    .page-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px;padding:12px 0 60px}
+    .p-card{background:white;border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:all .3s}
+    .p-card:hover{border-color:var(--pink);transform:translateY(-5px);box-shadow:0 14px 35px rgba(255,30,140,.1)}
+    .p-img{aspect-ratio:1/1.2;background:var(--warm);overflow:hidden;position:relative}
+    .p-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+    .p-card:hover .p-img img{transform:scale(1.07)}
+    .p-badge{position:absolute;top:10px;right:10px;background:var(--navy);color:white;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700}
+    .p-badge.sale{background:var(--pink)}
+    .p-details{padding:14px;text-align:center}
+    .p-details h4{font-size:13.5px;font-weight:700;color:var(--navy);margin-bottom:6px;line-height:1.4}
+    .p-price{color:var(--pink);font-weight:900;font-size:18px;margin-bottom:8px}
+    .p-sub{font-size:11.5px;color:var(--gray);margin-bottom:10px;line-height:1.5}
+    .card-swatches{display:flex;justify-content:center;gap:5px;flex-wrap:wrap;margin-bottom:10px;align-items:center}
+    .sw{width:16px;height:16px;border-radius:50%;border:1.5px solid rgba(0,0,0,.1);flex-shrink:0;cursor:pointer;transition:transform .15s}
+    .sw:hover{transform:scale(1.4)}
+    .sw.wh{border-color:#bbb}
+    .btn-stack{display:flex;flex-direction:column;gap:8px}
+    .btn-add-c{background:white;color:var(--navy);border:1.5px solid var(--navy);padding:9px;border-radius:40px;font-size:12.5px;font-weight:700;cursor:pointer;transition:all var(--trans);font-family:'Tajawal',sans-serif}
+    .btn-add-c:hover{background:var(--navy);color:white}
+    .btn-view-c{background:var(--navy);color:white;border:none;padding:9px;border-radius:40px;font-size:12.5px;font-weight:700;cursor:pointer;transition:all var(--trans);font-family:'Tajawal',sans-serif}
+    .btn-view-c:hover{background:var(--pink)}
+    .modal{display:none;position:fixed;inset:0;background:rgba(12,35,64,.65);z-index:2000;align-items:center;justify-content:center}
+    .modal.open{display:flex}
+    .modal-box{background:white;width:95%;max-width:520px;border-radius:22px;padding:26px;max-height:93vh;overflow-y:auto;position:relative;animation:mIn .25s ease}
+    @keyframes mIn{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:none}}
+    .m-close{position:absolute;top:14px;left:14px;width:32px;height:32px;background:var(--warm);border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--navy);transition:all var(--trans)}
+    .m-close:hover{background:var(--pink);color:white}
+    /* صور الأشكال في الكارت */
+    .card-img-thumbs{display:flex;gap:4px;flex-wrap:wrap;justify-content:center;margin-bottom:10px}
+    .card-img-thumbs img{width:36px;height:36px;object-fit:cover;border-radius:6px;cursor:pointer;border:2px solid transparent;transition:all .2s}
+    .card-img-thumbs img:hover{border-color:var(--navy)}
+    .card-img-thumbs img.th-active{border-color:var(--pink)}
+    /* صور الأشكال في الموديل */
+    .m-th-sel{border-color:var(--pink)!important;box-shadow:0 0 0 2px rgba(255,30,140,.3)!important}
+    .m-shape-label{font-size:13px;font-weight:700;color:var(--navy);margin:12px 0 6px}
+    .m-thumbs img{border:2px solid transparent;transition:all .2s}
+    .m-thumbs img:hover{border-color:var(--navy)}
+    .m-img{width:100%;border-radius:14px;height:260px;object-fit:cover;margin-bottom:10px}
+    .m-thumbs{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-bottom:14px}
+    .m-thumbs img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid transparent;transition:border-color .2s}
+    .m-thumbs img:hover{border-color:var(--pink)}
+    .m-title{font-size:17px;font-weight:800;color:var(--navy);margin-bottom:5px}
+    .m-price{font-size:22px;font-weight:900;color:var(--pink);margin-bottom:8px}
+    .m-desc{font-size:13px;color:#666;line-height:1.8;margin-bottom:14px;padding:12px;background:var(--cream);border-radius:10px}
+    .m-lbl{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:8px;display:block}
+    .m-colors{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:6px;padding:4px 2px}
+    .m-color{width:30px;height:30px;border-radius:50%;border:2.5px solid transparent;cursor:pointer;transition:all .2s;box-shadow:0 2px 5px rgba(0,0,0,.12);flex-shrink:0}
+    .m-color:hover{transform:scale(1.3)}
+    .m-color.sel{border-color:var(--navy)!important;box-shadow:0 0 0 3px rgba(12,35,64,.2)}
+    .m-color.wh-c{border-color:#ccc}
+    .m-sel{font-size:12px;color:var(--navy);font-weight:700;margin-bottom:14px;min-height:16px}
+    .m-qty-row{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+    .m-qty-row label{font-size:13px;font-weight:700;color:var(--navy)}
+    .qty-ctrl{display:flex;align-items:center;gap:8px}
+    .qbtn{width:30px;height:30px;border:1.5px solid var(--border);background:none;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all var(--trans)}
+    .qbtn:hover{border-color:var(--pink);color:var(--pink)}
+    .qval{font-weight:800;font-size:16px;min-width:24px;text-align:center}
+    .m-btn-buy{background:var(--pink);color:white;border:none;width:100%;padding:14px;border-radius:50px;font-size:14px;font-weight:700;cursor:pointer;transition:all var(--trans);font-family:'Tajawal',sans-serif;margin-bottom:9px}
+    .m-btn-buy:hover{background:var(--pink2)}
+    .m-btn-cart{background:white;color:var(--navy);border:1.5px solid var(--navy);width:100%;padding:13px;border-radius:50px;font-size:14px;font-weight:700;cursor:pointer;transition:all var(--trans);font-family:'Tajawal',sans-serif}
+    .m-btn-cart:hover{background:var(--navy);color:white}
+    .notif{position:fixed;bottom:90px;right:20px;background:var(--navy);color:white;padding:12px 20px;border-radius:12px;font-size:14px;font-weight:600;box-shadow:0 6px 20px rgba(0,0,0,.2);transform:translateY(10px);opacity:0;transition:all .3s;z-index:9999;border-right:4px solid var(--pink);pointer-events:none}
+    .notif.show{transform:none;opacity:1}
+    @media(max-width:600px){.page-grid{grid-template-columns:repeat(2,1fr);gap:10px}}
+  </style>
+</head>
+<body>
+
+<!-- TOP PROMO BAR -->
+<div class="top-promo-banner">
+  <div class="promo-text-container">
+    <span class="promo-text">🎁 شحن مجاني عند الطلب فوق <b>500 جنيه</b></span>
+    <span class="promo-text">✨ اشتري 2 واحصلي على خصم <b>15%</b></span>
+    <span class="promo-text">🔥 خصومات تصل إلى <b>50%</b></span>
+    <span class="promo-text">💳 الدفع عند الاستلام <b>متاح</b></span>
+    <span class="promo-text">🌟 ضمان استرجاع <b>14 يوم</b></span>
+    <span class="promo-text">🎁 شحن مجاني عند الطلب فوق <b>500 جنيه</b></span>
+    <span class="promo-text">✨ اشتري 2 واحصلي على خصم <b>15%</b></span>
+    <span class="promo-text">🔥 خصومات تصل إلى <b>50%</b></span>
+    <span class="promo-text">💳 الدفع عند الاستلام <b>متاح</b></span>
+    <span class="promo-text">🌟 ضمان استرجاع <b>14 يوم</b></span>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header class="main-header">
+  <div class="container header-container">
+    <div class="header-actions header-actions-right">
+      <button class="mobile-search-btn" onclick="openMobileSearch()" title="بحث"><i class="fas fa-search"></i></button>
+      <div class="search-area">
+        <i class="fas fa-search"></i>
+        <input type="text" placeholder="ابحثي عن منتج...">
+      </div>
+    </div>
+    <div class="logo">
+      <a href="index.html">
+        <img src="images/Gemini_Generated_Image_h6itgfh6itgfh6it.png" alt="Kashmera">
+      </a>
+    </div>
+    <div class="header-actions header-actions-left">
+      <a href="#" class="icon-link" onclick="openCart();return false" title="السلة">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="cart-badge" id="cart-count">0</span>
+      </a>
+      <a href="account.html" title="حسابي"><i class="fas fa-user"></i></a>
+    </div>
+  </div>
+</header>
+
+<!-- MOBILE SEARCH OVERLAY -->
+<div class="mobile-search-overlay" id="mobile-search-overlay">
+  <div class="mobile-search-box">
+    <div class="search-area">
+      <i class="fas fa-search"></i>
+      <input type="text" id="mobile-search-input" placeholder="ابحثي عن منتج...">
+    </div>
+    <button class="mobile-search-close" onclick="closeMobileSearch()"><i class="fas fa-times"></i></button>
+  </div>
+</div>
+
+<!-- MOBILE CATEGORY CHIPS -->
+<div class="mobile-cat-chips">
+  <a href="index.html">الكل</a>
+  <a href="cagual.html">كاجوال</a>
+  <a href="isdals.html" class="active">الاسدالات</a>
+  <a href="index.html#bestsellers">الأكثر مبيعاً</a>
+</div>
+
+<nav class="main-nav">
+  <div class="container">
+    <ul>
+      <li><a href="index.html">الرئيسية</a></li>
+      <li><a href="cagual.html">كاجوال</a></li>
+      <li><a href="isdals.html" class="active">الاسدالات</a></li>
+      <li><a href="#contact">تواصل معنا</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+
+<!-- HERO -->
+<div class="page-hero">
+  <div class="container">
+    <h1>👘 تشكيلة الاسدالات</h1>
+    <p>اسدالات فاخرة بأرقى الخامات – ستان، فسكوز، شابونيه وسي واي</p>
+  </div>
+</div>
+
+<div class="container">
+  <div class="categories-nav">
+    <button class="cat-btn active" onclick="doFilter('all',this)">الكل</button>
+    <button class="cat-btn" onclick="doFilter('satin',this)">ستان</button>
+    <button class="cat-btn" onclick="doFilter('jaguar',this)">جكار</button>
+  </div>
+  <div class="page-grid" id="isd-grid"></div>
+</div>
+
+<!-- MODAL -->
+<div class="modal" id="prodModal">
+  <div class="modal-box">
+    <button class="m-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+    <div id="modal-inner"></div>
+  </div>
+</div>
+
+<!-- SIDE CART -->
+<div class="cart-overlay" id="cart-overlay" onclick="closeCart()"></div>
+<div class="side-cart" id="side-cart">
+  <div class="cart-header">
+    <h3><i class="fas fa-shopping-cart" style="margin-left:8px"></i>سلة التسوق</h3>
+    <button class="cart-close" onclick="closeCart()"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="cart-body" id="side-cart-items">
+    <p style="text-align:center;padding:40px 20px;color:var(--gray)">السلة فارغة 🛒</p>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-total-row">
+      <span class="cart-total-label">الإجمالي</span>
+      <span class="cart-total-val" id="side-cart-total">0 جنيه</span>
+    </div>
+    <button class="btn-primary btn-large" onclick="window.location.href='checkout.html'">إتمام الشراء 💳</button>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="main-footer">
+  <div class="container footer-content">
+    <div>
+      <span class="footer-brand-name">KASHMERA</span>
+      <p class="footer-brand-desc">متجرك الأول للاستايل الكاجوال والاسدالات المحتشمة بأجود الخامات وأحدث التصاميم العصرية.</p>
+      <div class="footer-social">
+        <a href="https://www.instagram.com/kashmera_scarf_women?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="https://www.tiktok.com/@kashmer.scarf.women?is_from_webapp=1&sender_device=pc" target="_blank" title="TikTok"><i class="fab fa-tiktok"></i></a>
+        <a href="https://wa.me/201117500747" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+      </div>
+    </div>
+    <div class="footer-section">
+      <h4>أقسام المتجر</h4>
+      <ul>
+        <li><a href="cagual.html">كاجوال</a></li>
+        <li><a href="isdals.html">الاسدالات</a></li>
+      </ul>
+    </div>
+    <div class="footer-section">
+      <h4>روابط مهمة</h4>
+      <ul>
+        <li><a href="index.html#contact">تواصل معنا</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    <p>© 2026 Kashmera — جميع الحقوق محفوظة</p>
+    <p>💳 الدفع عند الاستلام متاح</p>
+  </div>
+</footer>
+
+<!-- MOBILE NAV -->
+<nav class="mobile-nav-bar">
+  <a href="index.html"><i class="fas fa-home"></i><span>الرئيسية</span></a>
+  <a href="cagual.html"><i class="fas fa-store"></i><span>المنتجات</span></a>
+  <a href="#" onclick="openCart();return false"><i class="fas fa-shopping-cart"></i><span>السلة</span></a>
+  <a href="account.html"><i class="fas fa-user"></i><span>حسابي</span></a>
+</nav>
+
+<!-- WHATSAPP BUTTON -->
+<a href="https://wa.me/201117500747" class="whatsapp-btn" target="_blank"><i class="fab fa-whatsapp"></i></a>
+<div class="notif" id="notif"></div>
+
+<script>
+// ══════════════════════════════════════════
+// الاسدالات — كل اسدال عنده صور للأشكال المتاحة
+// ══════════════════════════════════════════
+const ISDALS = [
+  {
+    id: 'ISD-SATAN-1',
+    type: 'satin',
+    name: 'إسدال ستان مشجر -تايجر',
+    price: 650,
+    badge: 'الأكثر طلباً 🔥',
+    desc: 'إسدال من الستان النقي المشجر، خامة ملكية ناعمة وباردة على الجسم، يتميز بقصة واسعة ومريحة جداً بنقشة الرسمة الأولى المميزة.',
+    imgs: [
+      'images/WhatsApp Image 2026-07-15 at 10.48.35 PM.jpeg',
+      'images/WhatsApp Image 2026-07-15 at 10.48.35 PM (1).jpeg'
+    ],
+    img: 'images/WhatsApp Image 2026-07-15 at 10.48.35 PM.jpeg'
+  },
+  {
+    id: 'ISD-SATAN-2',
+    type: 'satin',
+    name: 'إسدال ستان مشجر -light',
+    price: 650,
+    badge: 'وصل حديثاً ✨',
+    desc: 'إسدال من الستان النقي المشجر، خامة ملكية ناعمة وباردة على الجسم، يتميز بقصة واسعة ومريحة جداً بنقشة الرسمة الثانية المميزة.',
+    imgs: [
+      'images/WhatsApp Image 2026-07-15 at 10.48.37 PM (2).jpeg',
+      'images/WhatsApp Image 2026-07-15 at 10.48.37 PM (3).jpeg'
+    ],
+    img: 'images/WhatsApp Image 2026-07-15 at 10.48.37 PM (2).jpeg'
+  },
+  {
+    id: 'ISD-SATAN-3',
+    type: 'satin',
+    name: 'إسدال ستان مشجر - الرسمة 3',
+    price: 650,
+    badge: 'تميزي الآن 🌟',
+    desc: 'إسدال من الستان النقي المشجر، خامة ملكية ناعمة وباردة على الجسم، يتميز بقصة واسعة ومريحة جداً بنقشة الرسمة الثالثة المميزة.',
+    imgs: [
+      'images/WhatsApp Image 2026-07-15 at 10.48.38 PM.jpeg',
+      'images/WhatsApp Image 2026-07-15 at 10.48.36 PM (3).jpeg'
+    ],
+    img: 'images/WhatsApp Image 2026-07-15 at 10.48.36 PM (3).jpeg'
+  },
+  {
+    id: 'ISD-SATAN-4',
+    type: 'satin',
+    name: 'إسدال ستان مشجر - الرسمة 4',
+    price: 650,
+    badge: 'تشكيلة جديدة 💎',
+    desc: 'إسدال من الستان النقي المشجر، خامة ملكية ناعمة وباردة على الجسم، يتميز بقصة واسعة ومريحة جداً بنقشة الرسمة الرابعة المميزة.',
+    imgs: [
+      'images/WhatsApp Image 2026-07-15 at 10.48.36 PM (1).jpeg',
+      'images/WhatsApp Image 2026-07-15 at 10.48.36 PM (2).jpeg'
+    ],
+    img: 'images/WhatsApp Image 2026-07-15 at 10.48.36 PM (2).jpeg'
+  },
+  {
+    id: 'ISD-SATAN-6',
+    type: 'satin',
+    name: 'إسدال ستان مشجر - الرسمة 6',
+    price: 650,
+    badge: 'أناقة يومية 🌹',
+    desc: 'إسدال من الستان النقي المشجر، خامة ملكية ناعمة وباردة على الجسم، يتميز بقصة واسعة ومريحة جداً بنقشة الرسمة السادسة المميزة.',
+    imgs: [
+      'images/WhatsApp Image 2026-07-15 at 10.48.37 PM (4).jpeg',
+      'images/WhatsApp Image 2026-07-15 at 10.48.37 PM (5).jpeg'
+    ],
+    img: 'images/WhatsApp Image 2026-07-15 at 10.48.37 PM (4).jpeg'
+  },
+  {
+    id: 'ISD-SATAN-7',
+    type: 'satin',
+    name: 'إسدال ستان مشجر - الرسمة 7',
+    price: 650,
+    badge: 'إصدار خاص 🎨',
+    desc: 'إسدال من الستان النقي المشجر، خامة ملكية ناعمة وباردة على الجسم، يتميز بقصة واسعة ومريحة جداً بنقشة الرسمة السابعة المميزة.',
+    imgs: [
+      'images/WhatsApp Image 2026-07-15 at 10.48.35 PM (2).jpeg',
+      'images/WhatsApp Image 2026-07-15 at 10.48.36 PM.jpeg'
+    ],
+    img: 'images/WhatsApp Image 2026-07-15 at 10.48.38 PM.jpeg'
+  },
+  {
+    id: 'ISD-SATAN-8',
+    type: 'satin',
+    name: 'إسدال ستان مشجر - الرسمة 8',
+    price: 650,
+    badge: 'رونق عصري ✨',
+    desc: 'إسدال من الستان النقي المشجر، خامة ملكية ناعمة وباردة على الجسم، يتميز بقصة واسعة ومريحة جداً بنقشة الرسمة الثامنة المميزة.',
+    imgs: [
+      'images/WhatsApp Image 2026-07-15 at 10.48.36 PM (5).jpeg',
+      'images/WhatsApp Image 2026-07-15 at 10.48.36 PM (4).jpeg'
+    ],
+    img: 'images/WhatsApp Image 2026-07-15 at 10.48.36 PM (5).jpeg'
+  },
+  {
+    id: 'ISD-SATAN-9',
+    type: 'satin',
+    name: 'إسدال ستان مشجر - الرسمة 9',
+    price: 650,
+    badge: 'آخر قطع 🚨',
+    desc: 'إسدال من الستان النقي المشجر، خامة ملكية ناعمة وباردة على الجسم، يتميز بقصة واسعة ومريحة جداً بنقشة الرسمة التاسعة المميزة.',
+    imgs: [
+      'images/WhatsApp Image 2026-07-15 at 10.48.36 PM (6).jpeg',
+      'images/WhatsApp Image 2026-07-15 at 10.48.38 PM (1).jpeg'
+    ],
+    img: 'images/WhatsApp Image 2026-07-15 at 10.48.36 PM (6).jpeg'
+  },
+  {
+    id: 'JAGUAR-BLACK',
+    type: 'jaguar',
+    category: 'الاسدالات',
+    name: 'إسدال جاكار - أسود',
+    price: 750,
+    badge: 'مميز',
+    rating: 4.9,
+    desc: 'إسدال جاكار فاخر بلون أسود أنيق، خامة ناعمة ومناسبة للظهور بكل أناقة.',
+    image: 'images/WhatsApp Image 2026-08-04 at 7.12.37 PM.jpeg',
+    imgs: ['images/WhatsApp Image 2026-08-04 at 7.12.37 PM.jpeg'],
+    img: 'images/WhatsApp Image 2026-08-04 at 7.12.37 PM.jpeg'
+  },
+  {
+    id: 'JAGUAR-OLIVE',
+    type: 'jaguar',
+    category: 'الاسدالات',
+    name: 'إسدال جاكار - زيتي',
+    price: 750,
+    badge: 'مميز',
+    rating: 4.9,
+    desc: 'إسدال جاكار بلون زيتي دافئ، جذاب ومناسب للستايل العصري.',
+    image: 'images/WhatsApp Image 2026-08-04 at 7.12.37 PM (1).jpeg',
+    img: 'images/WhatsApp Image 2026-08-04 at 7.12.37 PM (1).jpeg'
+  },
+  {
+    id: 'JAGUAR-YELLOW',
+    type: 'jaguar',
+    category: 'الاسدالات',
+    name: 'إسدال جاكار - أصفر',
+    price: 750,
+    badge: 'مميز',
+    rating: 4.9,
+    desc: 'إسدال جاكار بلون أصفر مشرق، إضافة لونية أنيقة ومميزة.',
+    image: 'images/WhatsApp Image 2026-08-04 at 7.12.37 PM (2).jpeg',
+    imgs: ['images/WhatsApp Image 2026-08-04 at 7.12.37 PM (2).jpeg'],
+    img: 'images/WhatsApp Image 2026-08-04 at 7.12.37 PM (2).jpeg'
+  },
+  {
+    id: 'JAGUAR-PINK',
+    type: 'jaguar',
+    category: 'الاسدالات',
+    name: 'إسدال جاكار - بينك',
+    price: 750,
+    badge: 'مميز',
+    rating: 4.9,
+    desc: 'إسدال جاكار بلون بينك ناعم، يناسب الإطلالات الراقية والناعمة.',
+    image: 'images/WhatsApp Image 2026-08-04 at 7.12.37 PM (3).jpeg',
+    imgs: ['images/WhatsApp Image 2026-08-04 at 7.12.37 PM (3).jpeg'],
+    img: 'images/WhatsApp Image 2026-08-04 at 7.12.37 PM (3).jpeg'
+  },
+  {
+    id: 'JAGUAR-BLUE',
+    type: 'jaguar',
+    category: 'الاسدالات',
+    name: 'إسدال جاكار - أزرق',
+    price: 750,
+    badge: 'مميز',
+    rating: 4.9,
+    desc: 'إسدال جاكار بلون أزرق هادئ وراقي، يناسب جميع الأنماط.',
+    image: 'images/WhatsApp Image 2026-08-04 at 7.12.38 PM.jpeg',
+    imgs: ['images/WhatsApp Image 2026-08-04 at 7.12.38 PM.jpeg'],
+    img: 'images/WhatsApp Image 2026-08-04 at 7.12.38 PM.jpeg'
+  },
+
+];
+
+let allIsdals = [...ISDALS];
+
+// ── CART ──
+let cart=JSON.parse(localStorage.getItem('kash_cart')||'[]');
+let mSelectedImg=null;
+function _norm(i){
+  return {
+    ...i,
+    uid: i.uid || i.id || ('item-'+Date.now()),
+    qty: Number(i.qty ?? i.quantity ?? 1),
+    price: Number(i.price) || 0,
+    img: i.img || i.image || 'images/placeholder.jpg',
+    color: i.color || i.option || null,
+    colorHex: i.colorHex || null,
+  };
+}
+
+let mQty=1,mColor=null,mColorHex=null;
+
+function saveCart(){
+  localStorage.setItem('kash_cart',JSON.stringify(cart));
+  document.getElementById('cart-count').textContent=cart.reduce((s,i)=>s+(i.qty||i.quantity||1),0);
+  renderSideCart();
+}
+function openMobileSearch(){const o=document.getElementById('mobile-search-overlay');if(!o)return;o.classList.add('open');setTimeout(()=>document.getElementById('mobile-search-input')?.focus(),100);}
+function closeMobileSearch(){document.getElementById('mobile-search-overlay')?.classList.remove('open');}
+document.addEventListener('click',(e)=>{if(e.target.id==='mobile-search-overlay')closeMobileSearch();});
+function openCart(){document.getElementById('side-cart').classList.add('open');document.getElementById('cart-overlay').classList.add('show');document.body.style.overflow='hidden';renderSideCart();}
+function closeCart(){document.getElementById('side-cart').classList.remove('open');document.getElementById('cart-overlay').classList.remove('show');document.body.style.overflow='';}
+function renderSideCart(){
+  const body=document.getElementById('side-cart-items');
+  const tot=document.getElementById('side-cart-total');
+  if(!cart.length){body.innerHTML='<p style="text-align:center;padding:40px 20px;color:var(--gray)">السلة فارغة 🛒</p>';tot.textContent='0 جنيه';return;}
+  const _items=cart.map(_norm);
+  body.innerHTML=_items.map(item=>`
+    <div class="side-cart-item">
+      <img src="${item.img}" alt="${item.name}">
+      <div class="item-info">
+        <h4>${item.name}</h4>
+        ${item.color?`<div class="item-option" style="display:flex;align-items:center;gap:5px"><span style="width:12px;height:12px;border-radius:50%;background:${item.colorHex||'#ccc'};display:inline-block;border:1px solid rgba(0,0,0,.1)"></span>${item.color}</div>`:''}
+        <div class="item-price">${item.price} جنيه</div>
+        <div class="qty-row">
+          <button class="qty-btn" onclick="chQty('${item.uid}',-1)">−</button>
+          <span class="qty-val">${item.qty}</span>
+          <button class="qty-btn" onclick="chQty('${item.uid}',1)">+</button>
+          <button class="rm-btn" onclick="rmItem('${item.uid}')"><i class="fas fa-trash-alt"></i></button>
+        </div>
+      </div>
+    </div>`).join('');
+  tot.textContent=_items.reduce((s,i)=>s+i.price*i.qty,0)+' جنيه';
+}
+function chQty(uid,d){const i=cart.find(x=>(x.uid||x.id)===uid);if(i){i.qty=Math.max(1,(i.qty||1)+d);saveCart();}}
+function rmItem(uid){cart=cart.filter(x=>(x.uid||x.id)!==uid);saveCart();}
+function doAdd(prod,colorName,colorHex,qty){
+  cart.push({uid:prod.id+'_'+Date.now(),id:prod.id,name:prod.name,price:Number(prod.price)||0,qty:qty||1,color:colorName,colorHex,img:mSelectedImg||prod.img});
+  saveCart();showNotif('✅ تمت الإضافة للسلة!');return true;
+}
+function showNotif(msg){const el=document.getElementById('notif');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2800);}
+
+// ── RENDER ──
+function renderCard(item){
+  const mainImg = item.img || item.image || (item.imgs && item.imgs[0]) || 'images/placeholder.jpg';
+  const availImgs = (item.imgs || (item.image ? [item.image] : [])).filter((_,i)=>i<6);
+  const imgThumbsHTML = availImgs.length > 1 ? `
+    <div class="card-img-thumbs">
+      ${availImgs.map((src,i)=>`<img src="${src}" onerror="this.style.display='none'" onclick="event.stopPropagation();document.getElementById('card-main-${item.id}').src=this.src;document.querySelectorAll('#thumb-row-${item.id} .th-active').forEach(e=>e.classList.remove('th-active'));this.classList.add('th-active')" class="${i===0?'th-active':''}">`).join('')}
+    </div>` : '';
+  return `
+    <div class="p-card">
+      <div class="p-img">
+        <img id="card-main-${item.id}" src="${mainImg}" alt="${item.name}" loading="lazy">
+        <span class="p-badge">${item.badge}</span>
+      </div>
+      <div class="p-details">
+        <h4>${item.name}</h4>
+        <div class="p-price">${item.price} جنيه</div>
+        <p class="p-sub">${item.desc.substring(0,60)}...</p>
+        <div id="thumb-row-${item.id}">${imgThumbsHTML}</div>
+        <div class="btn-stack">
+          <button class="btn-add-c" onclick="quickAdd('${item.id}')">إضافة للسلة</button>
+          <button class="btn-view-c" onclick="openModal('${item.id}')">شاهد المنتج</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function quickAdd(id){
+  const p=ISDALS.find(x=>x.id===id);if(!p)return;
+  openModal(id);
+}
+
+function doFilter(type,btn){
+  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const filtered=type==='all'?ISDALS:ISDALS.filter(i=>i.type===type);
+  document.getElementById('isd-grid').innerHTML=filtered.map(renderCard).join('');
+}
+
+// ── MODAL ──
+function openModal(id){
+  const p=ISDALS.find(x=>x.id===id);if(!p)return;
+  mQty=1;mColor=null;mColorHex=null;
+  const availImgs = (p.imgs || [p.img || p.image]).filter(Boolean);
+  const selectedImg = availImgs[0] || p.img || p.image || 'images/placeholder.jpg';
+  mSelectedImg = selectedImg;
+
+  document.getElementById('modal-inner').innerHTML=`
+    <img class="m-img" id="mmi" src="${selectedImg}" alt="${p.name}">
+    <div class="m-thumbs">
+      ${availImgs.map((src,i)=>`<img src="${src}" onerror="this.style.display='none'"
+        onclick="document.getElementById('mmi').src=this.src;mSelectedImg=this.src;document.querySelectorAll('.m-thumbs img').forEach(x=>x.classList.remove('m-th-sel'));this.classList.add('m-th-sel')"
+        class="${i===0?'m-th-sel':''}">`).join('')}
+    </div>
+    <div class="m-title">${p.name}</div>
+    <div class="m-price">${p.price} جنيه</div>
+    <div class="m-desc">${p.desc}</div>
+    <div class="m-shape-label">اختاري الرسمة / الشكل: <span id="mst" style="color:var(--pink);font-weight:700">${availImgs.length > 0 ? 'رسمة 1' : '—'}</span></div>
+    <div class="m-qty-row">
+      <label>الكمية:</label>
+      <div class="qty-ctrl">
+        <button class="qbtn" onclick="chMQ(-1)">−</button>
+        <span class="qval" id="mqv">1</span>
+        <button class="qbtn" onclick="chMQ(1)">+</button>
+      </div>
+    </div>
+    <button class="m-btn-buy" onclick="buyNow('${p.id}')">شراء الآن 🛍️</button>
+    <button class="m-btn-cart" onclick="addFromModal('${p.id}')">أضف للسلة 🛒</button>`;
+
+  document.querySelectorAll('.m-thumbs img').forEach((img,i)=>{
+    img.addEventListener('click',()=>{
+      const el=document.getElementById('mst');
+      if(el) el.textContent='رسمة '+(i+1);
+      mColor='رسمة '+(i+1);
+    });
+  });
+  mColor = availImgs.length > 0 ? 'رسمة 1' : null;
+  document.getElementById('prodModal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function chMQ(d){mQty=Math.max(1,mQty+d);document.getElementById('mqv').textContent=mQty;}
+function closeModal(){document.getElementById('prodModal').classList.remove('open');document.body.style.overflow='';}
+function addFromModal(id){const p=ISDALS.find(x=>x.id===id);if(!p)return;if(doAdd(p,mColor,mColorHex,mQty)){closeModal();openCart();}}
+function buyNow(id){const p=ISDALS.find(x=>x.id===id);if(!p)return;if(doAdd(p,mColor,mColorHex,mQty)){closeModal();setTimeout(()=>{window.location.href='checkout.html';},50);}}
+document.getElementById('prodModal').addEventListener('click',function(e){if(e.target===this)closeModal();});
+
+// ── INIT ──
+document.getElementById('isd-grid').innerHTML=ISDALS.map(renderCard).join('');
+document.getElementById('cart-count').textContent=cart.reduce((s,i)=>s+(i.qty||i.quantity||1),0);
+</script>
+</body>
+</html>

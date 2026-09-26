@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>الأكثر مبيعاً - Kashmera</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="top-promo-banner">
+    <div class="promo-text-container">
+      <span class="promo-text">توصيل القاهرة <b>80 جنيه</b> والجيزة <b>120 جنيه</b> وباقي المحافظات <b>150 جنيه</b></span>
+      <span class="promo-text">توصيل القاهرة <b>80 جنيه</b> والجيزة <b>120 جنيه</b> وباقي المحافظات <b>150 جنيه</b></span>
+    </div>
+  </div>
+
+  <header class="main-header">
+    <div class="container header-container">
+      <div class="header-actions header-actions-right">
+        <div class="search-area"><i class="fas fa-search"></i><input type="text" placeholder="ابحثي عن منتج..."></div>
+      </div>
+      <div class="logo"><a href="index.html"><img src="images/Gemini_Generated_Image_h6itgfh6itgfh6it.png" alt="Kashmera"></a></div>
+      <div class="header-actions header-actions-left">
+        <a href="#" class="icon-link" onclick="openCart();return false" title="السلة"><i class="fas fa-shopping-cart"></i><span class="cart-badge" id="cart-count">0</span></a>
+      </div>
+    </div>
+  </header>
+
+  <nav class="main-nav">
+    <div class="container"><ul>
+      <li><a href="index.html">الرئيسية</a></li>
+      <li><a href="cagual.html">كاجوال</a></li>
+      <li><a href="isdals.html">الاسدالات</a></li>
+      <li><a href="bestsellers.html" class="active">الأكثر مبيعاً</a></li>
+    </ul></div>
+  </nav>
+
+  <main class="products-section">
+    <div class="container">
+      <h1 class="section-title">الأكثر مبيعاً</h1>
+      <div class="products-grid" id="bestsellers-page-grid"></div>
+    </div>
+  </main>
+
+  <footer class="main-footer">
+    <div class="container footer-content">
+      <div><span class="footer-brand-name">KASHMERA</span><p class="footer-brand-desc">ملابس كاجوال واسدالات أنيقة ومحتشمة.</p></div>
+      <div class="footer-section"><h4>أقسام المتجر</h4><ul>
+        <li><a href="index.html">الرئيسية</a></li>
+        <li><a href="cagual.html">كاجوال خروج</a></li>
+        <li><a href="isdals.html">الاسدالات الراقية</a></li>
+      </ul></div>
+    </div>
+    <div class="container footer-bottom"><p>© 2026 Kashmera — جميع الحقوق محفوظة</p></div>
+  </footer>
+
+  <div class="cart-overlay" id="cart-overlay" onclick="closeCart()"></div>
+  <div class="side-cart" id="side-cart">
+    <div class="cart-header"><h3><i class="fas fa-shopping-cart" style="margin-left:8px"></i>سلة التسوق</h3><button class="cart-close" onclick="closeCart()"><i class="fas fa-times"></i></button></div>
+    <div class="cart-body" id="side-cart-items"><p style="text-align:center;padding:40px 20px;color:var(--gray)">السلة فارغة</p></div>
+    <div class="cart-footer"><div class="cart-total-row"><span class="cart-total-label">الإجمالي</span><span class="cart-total-val" id="side-cart-total">0 جنيه</span></div><button class="btn-primary btn-large" onclick="location.href='checkout.html'">إتمام الشراء</button></div>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    const bestsellerIds = ['T009-BEIGE', 'ISD-SATAN-1', 'ISD-SATAN-2', 'TSHIRT-BLK'];
+    const bestsellerGrid = document.getElementById('bestsellers-page-grid');
+    bestsellerGrid.innerHTML = bestsellerIds.map(id => products[id]).filter(Boolean).map(product => `
+      <article class="product-card">
+        <div class="product-image">
+          <img src="${product.image || product.img || product.imgs?.[0] || 'images/placeholder.jpg'}" alt="${product.name}" loading="lazy" onerror="this.src='images/placeholder.jpg'">
+          <span class="product-badge">${product.badge || 'الأكثر مبيعاً'}</span>
+        </div>
+        <div class="product-info">
+          <h2>${product.name}</h2>
+          <p class="product-code">كود: ${product.id}</p>
+          <div class="product-rating">⭐ ${product.rating || ''}</div>
+          <p class="product-price">${product.price} جنيه</p>
+          <div class="product-actions">
+            <a href="product.html?id=${product.id}" class="btn-primary">عرض التفاصيل</a>
+            <button class="btn-secondary" onclick="addToCart('${product.id}','${product.name}',${product.price})">أضف للسلة</button>
+          </div>
+        </div>
+      </article>
+    `).join('');
+  </script>
+</body>
+</html>
